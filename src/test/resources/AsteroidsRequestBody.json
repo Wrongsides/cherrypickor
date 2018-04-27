@@ -1,0 +1,40 @@
+{
+  "asteroids": [
+    {
+      "name": "Bright Spodumain",
+      "quantity": "13396",
+      "volume": {
+        "value": "214336",
+        "unit": "m3"
+      },
+      "distance": {
+        "value": "188",
+        "unit": "km"
+      }
+    },
+    {
+      "name": "Bright Spodumain",
+      "quantity": "2829",
+      "volume": {
+        "value": "45264",
+        "unit": "m3"
+      },
+      "distance": {
+        "value": "217",
+        "unit": "km"
+      }
+    },
+    {
+      "name": "Sharp Crokite",
+      "quantity": "10015",
+      "volume": {
+        "value": "160240",
+        "unit": "m3"
+      },
+      "distance": {
+        "value": "234",
+        "unit": "km"
+      }
+    }
+  ]
+}

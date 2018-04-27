@@ -1,0 +1,195 @@
+{
+	"info": {
+		"name": "Eve",
+		"_postman_id": "ef59979e-d76a-5a8e-b95c-d6aff20e6c90",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET asteroid",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{eve.url}}/search/?datasource=tranquility&categories=inventory_type&search=Bright Spodumain&strict=true",
+					"host": [
+						"{{eve.url}}"
+					],
+					"path": [
+						"search",
+						""
+					],
+					"query": [
+						{
+							"key": "datasource",
+							"value": "tranquility",
+							"equals": true
+						},
+						{
+							"key": "categories",
+							"value": "inventory_type",
+							"equals": true
+						},
+						{
+							"key": "search",
+							"value": "Bright Spodumain",
+							"equals": true
+						},
+						{
+							"key": "strict",
+							"value": "true",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET solar system",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{eve.url}}/search/?datasource=tranquility&categories=solar_system&search=Jita&strict=true",
+					"host": [
+						"{{eve.url}}"
+					],
+					"path": [
+						"search",
+						""
+					],
+					"query": [
+						{
+							"key": "datasource",
+							"value": "tranquility",
+							"equals": true
+						},
+						{
+							"key": "categories",
+							"value": "solar_system",
+							"equals": true
+						},
+						{
+							"key": "search",
+							"value": "Jita",
+							"equals": true
+						},
+						{
+							"key": "strict",
+							"value": "true",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET region",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{eve.url}}/search/?datasource=tranquility&categories=region&search=The Forge&strict=true",
+					"host": [
+						"{{eve.url}}"
+					],
+					"path": [
+						"search",
+						""
+					],
+					"query": [
+						{
+							"key": "datasource",
+							"value": "tranquility",
+							"equals": true
+						},
+						{
+							"key": "categories",
+							"value": "region",
+							"equals": true
+						},
+						{
+							"key": "search",
+							"value": "The Forge",
+							"equals": true
+						},
+						{
+							"key": "strict",
+							"value": "true",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET buy orders",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{eve.url}}/markets/10000002/orders/?datasource=tranquility&order_type=buy&type_id=17466",
+					"host": [
+						"{{eve.url}}"
+					],
+					"path": [
+						"markets",
+						"10000002",
+						"orders",
+						""
+					],
+					"query": [
+						{
+							"key": "datasource",
+							"value": "tranquility",
+							"equals": true
+						},
+						{
+							"key": "order_type",
+							"value": "buy",
+							"equals": true
+						},
+						{
+							"key": "type_id",
+							"value": "17466",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
