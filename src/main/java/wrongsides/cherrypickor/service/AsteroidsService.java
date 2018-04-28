@@ -19,7 +19,6 @@ public class AsteroidsService {
     private IdRepository idRepository;
     private ValuationService valuationService;
 
-    @Autowired
     public AsteroidsService(IdRepository idRepository, ValuationService valuationService) {
         this.idRepository = idRepository;
         this.valuationService = valuationService;

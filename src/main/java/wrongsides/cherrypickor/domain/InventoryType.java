@@ -13,6 +13,9 @@ public class InventoryType {
     private List<String> inventoryTypeIds;
 
     public List<String> getInventoryTypeIds() {
-        return inventoryTypeIds == null ? new ArrayList<>() : inventoryTypeIds;
+        if (inventoryTypeIds == null) {
+            inventoryTypeIds = new ArrayList<>();
+        }
+        return inventoryTypeIds;
     }
 }

@@ -13,6 +13,9 @@ public class Region {
     private List<String> regionIds;
 
     public List<String> getRegionIds() {
-        return regionIds == null ? new ArrayList<>() : regionIds;
+        if (regionIds == null) {
+            regionIds = new ArrayList<>();
+        }
+        return regionIds;
     }
 }
