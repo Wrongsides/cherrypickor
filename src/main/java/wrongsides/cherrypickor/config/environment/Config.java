@@ -14,4 +14,8 @@ public abstract class Config {
     public String getEsiDatasource() {
         return "tranquility";
     }
+
+    public String getApplicationRoot() {
+        return "";
+    }
 }
