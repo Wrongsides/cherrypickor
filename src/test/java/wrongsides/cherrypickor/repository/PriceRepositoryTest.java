@@ -9,11 +9,13 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import wrongsides.cherrypickor.config.environment.Config;
 import wrongsides.cherrypickor.domain.MarketOrder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,6 +27,8 @@ import static org.mockito.Mockito.when;
 public class PriceRepositoryTest {
 
     @Mock
+    private Config config;
+    @Mock
     private RestTemplate restTemplate;
     @Mock
     private ResponseEntity<List<MarketOrder>> responseEntity;
@@ -33,7 +37,7 @@ public class PriceRepositoryTest {
 
     @Before
     public void setUp() {
-        priceRepository = new PriceRepository(restTemplate);
+        priceRepository = new PriceRepository(config, restTemplate);
     }
 
     @Test
@@ -44,8 +48,8 @@ public class PriceRepositoryTest {
         when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(new ParameterizedTypeReference<List<MarketOrder>>() {}))).thenReturn(responseEntity);
         when(responseEntity.getBody()).thenReturn(marketOrders);
 
-        BigDecimal maxBuyOrder = priceRepository.getMaxBuyOrderFor("17466", "10000002");
+        Optional<BigDecimal> maxBuyOrder = priceRepository.getMaxBuyOrderFor("17466", "10000002");
 
-        assertThat(maxBuyOrder).isEqualTo(new BigDecimal("3050.67"));
+        assertThat(maxBuyOrder.get()).isEqualTo(new BigDecimal("3050.67"));
     }
 }

@@ -25,15 +25,14 @@ public class AsteroidsService {
     }
 
     public void sortByValue(List<Asteroid> asteroids, Criteria valuationCriteria) {
-
-        String regionId = idRepository.findRegion("The Forge");
-
-        asteroids.forEach((Asteroid asteroid) -> {
-            String asteroidId = idRepository.findItemTypeId(asteroid.getName());
-            asteroid.setValue(valuationService.appraise(asteroidId, regionId, asteroid.getQuantity(), valuationCriteria));
+        idRepository.findRegion("The Forge").ifPresent(regionId -> {
+            asteroids.forEach((Asteroid asteroid) -> {
+                idRepository.findItemTypeId(asteroid.getName()).ifPresent(asteroidId -> {
+                    asteroid.setValue(valuationService.appraise(asteroidId, regionId, asteroid.getQuantity(), valuationCriteria));
+                });
+            });
+            asteroids.sort((a1, a2) -> a2.getValue().compareTo(a1.getValue()));
         });
-
-        asteroids.sort((a1, a2) -> a2.getValue().compareTo(a1.getValue()));
     }
 
     public List<Asteroid> parseScannerOutput(String body) {
@@ -60,19 +59,17 @@ public class AsteroidsService {
             asteroid.setName(split[0]);
             asteroid.setQuantity(NumberFormat.getNumberInstance(Locale.UK).parse(split[1]).intValue());
 
-
-
             String volumeStr = split[2];
 
             Measure volume = new Measure();
-            volume.setValue(NumberFormat.getNumberInstance(Locale.UK).parse(volumeStr.substring(0, volumeStr.length()-3)).intValue());
-            volume.setUnit(volumeStr.substring(volumeStr.length()-2, volumeStr.length()));
+            volume.setValue(NumberFormat.getNumberInstance(Locale.UK).parse(volumeStr.substring(0, volumeStr.length() - 3)).intValue());
+            volume.setUnit(volumeStr.substring(volumeStr.length() - 2, volumeStr.length()));
             asteroid.setVolume(volume);
 
             String distanceStr = split[3];
             Measure distance = new Measure();
-            distance.setValue(NumberFormat.getNumberInstance(Locale.UK).parse(distanceStr.substring(0, distanceStr.length()-3)).intValue());
-            distance.setUnit(distanceStr.substring(distanceStr.length()-2, distanceStr.length()));
+            distance.setValue(NumberFormat.getNumberInstance(Locale.UK).parse(distanceStr.substring(0, distanceStr.length() - 3)).intValue());
+            distance.setUnit(distanceStr.substring(distanceStr.length() - 2, distanceStr.length()));
             asteroid.setDistance(distance);
         } catch (ParseException e) {
             e.printStackTrace();

@@ -16,10 +16,10 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -53,8 +53,11 @@ public class AsteroidsControllerTest {
     }
 
     @Test
-    public void post_givenNull_throwsException() throws Exception {
-        assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> asteroidsController.post(null));
+    public void post_givenNull_doesNotCallServiceAndReturnsEmptyAsteroids() {
+        AsteroidsResource asteroidsResource = asteroidsController.post(null);
+
+        verifyZeroInteractions(asteroidsService);
+        assertThat(asteroidsResource.getAsteroids()).isEmpty();
+        assertThat(asteroidsResource.getLinks()).hasSize(2);
     }
 }

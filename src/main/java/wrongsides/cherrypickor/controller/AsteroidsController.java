@@ -31,6 +31,13 @@ public class AsteroidsController {
 
     @PostMapping
     public AsteroidsResource post(@RequestBody String body) {
+        AsteroidsResource asteroidsResource = new AsteroidsResource();
+        asteroidsResource.add(linkTo(methodOn(AsteroidsController.class).post(null)).withSelfRel());
+        asteroidsResource.add(linkTo(methodOn(RootController.class).get()).withRel("root"));
+
+        if(body == null) {
+            return asteroidsResource;
+        }
 
         Asteroids asteroids = new Asteroids();
 
@@ -44,13 +51,9 @@ public class AsteroidsController {
             asteroids.setAsteroids(asteroidsService.parseScannerOutput(body));
         }
 
-        AsteroidsResource asteroidsResource = new AsteroidsResource();
-
         asteroidsService.sortByValue(asteroids.getAsteroids(), Criteria.VALUE);
 
         asteroidsResource.setAsteroids(asteroids.getAsteroids());
-        asteroidsResource.add(linkTo(methodOn(AsteroidsController.class).post(null)).withSelfRel());
-        asteroidsResource.add(linkTo(methodOn(RootController.class).get()).withRel("root"));
         return asteroidsResource;
     }
 }

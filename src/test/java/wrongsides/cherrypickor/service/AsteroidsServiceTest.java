@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -56,8 +57,8 @@ public class AsteroidsServiceTest {
         crock.setQuantity(50);
         crock.setValue(BigDecimal.TEN);
         List<Asteroid> asteroids = Arrays.asList(spod1, spod2, crock);
-        when(idRepository.findRegion(anyString())).thenReturn("regionId");
-        when(idRepository.findItemTypeId(anyString())).thenReturn("itemTypeId");
+        when(idRepository.findRegion(anyString())).thenReturn(Optional.of("regionId"));
+        when(idRepository.findItemTypeId(anyString())).thenReturn(Optional.of("itemTypeId"));
         when(valuationService.appraise(anyString(), anyString(), eq(100), any(Criteria.class))).thenReturn(new BigDecimal("100"));
         when(valuationService.appraise(anyString(), anyString(), eq(90), any(Criteria.class))).thenReturn(new BigDecimal("900"));
         when(valuationService.appraise(anyString(), anyString(), eq(50), any(Criteria.class))).thenReturn(new BigDecimal("500"));

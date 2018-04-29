@@ -9,6 +9,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InventoryType {
 
+    public InventoryType() { }
+
     @JsonAlias("inventory_type")
     private List<String> inventoryTypeIds;
 

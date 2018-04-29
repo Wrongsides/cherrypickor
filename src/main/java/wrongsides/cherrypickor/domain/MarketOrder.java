@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MarketOrder {
 
+    public MarketOrder() { }
+
     public MarketOrder(String systemId, BigDecimal price) {
         this.systemId = systemId;
         this.price = price;
