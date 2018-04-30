@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import wrongsides.cherrypickor.CherrypickorApplication;
 import wrongsides.cherrypickor.config.environment.LocalConfig;
 import wrongsides.cherrypickor.domain.Asteroid;
 import wrongsides.cherrypickor.domain.collections.Asteroids;
@@ -33,6 +34,8 @@ public class StepDefinitions implements En {
     private ResponseEntity<Asteroids> asteroidsResponse;
 
     public StepDefinitions() throws URISyntaxException {
+
+        CherrypickorApplication.main(new String[]{});
 
         this.traverson = new Traverson(new URI(new LocalConfig().getApplicationRoot()), MediaTypes.HAL_JSON);
         this.restTemplate = new RestTemplate();
