@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StepDefinitions implements En {
@@ -35,21 +34,27 @@ public class StepDefinitions implements En {
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
     private ResponseEntity<Asteroids> asteroidsResponse;
+    private WireMockServer wireMockServer;
 
     public StepDefinitions() throws URISyntaxException {
-
-        CherrypickorApplication.main(new String[]{});
-        WireMockServer wireMockServer = new WireMockServer(wireMockConfig()); //No-args constructor will start on port 8080, no HTTPS
-        wireMockServer.start();
-        stubForRegion();
-        stubForSpod();
-        stubForSpodBuyOrder();
-        stubForCrok();
-        stubForCrokBuyOrder();
 
         this.traverson = new Traverson(new URI(new LocalConfig().getApplicationRoot()), MediaTypes.HAL_JSON);
         this.restTemplate = new RestTemplate();
         this.objectMapper = new ObjectMapper();
+        this.wireMockServer = new WireMockServer();
+
+        Given("^Cherrypickor is running$", () -> {
+            CherrypickorApplication.main(new String[]{});
+        });
+
+        And("^ESI services are available$", () -> {
+            wireMockServer.start();
+            stubForRegion();
+            stubForSpod();
+            stubForSpodBuyOrder();
+            stubForCrok();
+            stubForCrokBuyOrder();
+        });
 
         When("^I post a list of asteroids$", () -> {
             String body = FileUtils.readFileToString(new File("src/test/resources/AsteroidsRequestBody.json"), StandardCharsets.UTF_8);
