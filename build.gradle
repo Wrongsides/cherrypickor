@@ -1,13 +1,13 @@
 buildscript {
-	ext {
-		springBootVersion = '2.0.0.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '2.0.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
@@ -19,13 +19,36 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.boot:spring-boot-starter-hateoas')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('commons-io:commons-io:2.5')
+    compile('org.springframework.boot:spring-boot-starter')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-hateoas')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('com.github.tomakehurst:wiremock:2.17.0')
+    testCompile('io.cucumber:cucumber-java8:2.4.0')
+    testCompile('io.cucumber:cucumber-junit:2.4.0')
+    testCompile('commons-io:commons-io:2.5')
 }
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testRuntime
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, compileTestJava
+    doLast {
+        javaexec {
+            main = "cucumber.api.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--glue', 'wrongsides.cherrypickor.cucumber', 'src/test/resources']
+        }
+    }
+}
+
+build.dependsOn(cucumber)
