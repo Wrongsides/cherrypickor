@@ -70,7 +70,7 @@ public class AsteroidsServiceTest {
 
     @Test
     public void parseScannerOutput_givenScannerOutput_returnsAsteroids() throws IOException {
-        String body = FileUtils.readFileToString(new File("src/test/resources/SurveyScannerOutputTest"), StandardCharsets.UTF_8);
+        String body = FileUtils.readFileToString(new File("src/test/resources/SurveyScannerRequestBody"), StandardCharsets.UTF_8);
         Asteroids expectedAsteroids = objectMapper.readValue(FileUtils.readFileToString(new File("src/test/resources/AsteroidsRequestBody.json"), StandardCharsets.UTF_8), Asteroids.class);
         List<Asteroid> asteroidsAsteroids = expectedAsteroids.getAsteroids();
 

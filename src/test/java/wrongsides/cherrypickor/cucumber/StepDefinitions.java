@@ -1,6 +1,5 @@
 package wrongsides.cherrypickor.cucumber;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import cucumber.api.java8.En;
 import org.apache.commons.io.FileUtils;
@@ -32,7 +31,6 @@ public class StepDefinitions implements En {
 
     private Traverson traverson;
     private RestTemplate restTemplate;
-    private ObjectMapper objectMapper;
     private ResponseEntity<Asteroids> asteroidsResponse;
     private WireMockServer wireMockServer;
 
@@ -40,7 +38,6 @@ public class StepDefinitions implements En {
 
         this.traverson = new Traverson(new URI(new LocalConfig().getApplicationRoot()), MediaTypes.HAL_JSON);
         this.restTemplate = new RestTemplate();
-        this.objectMapper = new ObjectMapper();
         this.wireMockServer = new WireMockServer();
 
         Given("^Cherrypickor is running$", () -> {
@@ -56,10 +53,9 @@ public class StepDefinitions implements En {
             stubForCrokBuyOrder();
         });
 
-        When("^I post a list of asteroids$", () -> {
-            String body = FileUtils.readFileToString(new File("src/test/resources/AsteroidsRequestBody.json"), StandardCharsets.UTF_8);
-            Asteroids asteroidsBody = objectMapper.readValue(body, Asteroids.class);
-            HttpEntity<Asteroids> request = new HttpEntity<>(asteroidsBody);
+        When("^I post '(.*)' to the asteroids endpoint$", (filename) -> {
+            String body = FileUtils.readFileToString(new File("src/test/resources/" + filename), StandardCharsets.UTF_8);
+            HttpEntity<String> request = new HttpEntity<>(body);
 
             Link asteroidsUri = traverson.follow("asteroids").asLink();
             asteroidsResponse = restTemplate.postForEntity(asteroidsUri.getHref(), request, Asteroids.class);
