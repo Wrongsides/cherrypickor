@@ -16,6 +16,6 @@ public abstract class Config {
     }
 
     public String getApplicationRoot() {
-        return "";
+        return "http://localhost:9000";
     }
 }
