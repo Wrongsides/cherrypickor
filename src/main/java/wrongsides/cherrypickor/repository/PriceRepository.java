@@ -28,7 +28,7 @@ public class PriceRepository {
                 config.getEsiUrl(), config.getEsiVersion(), regionId, config.getEsiDatasource(), asteroidId);
         ResponseEntity<List<MarketOrder>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<MarketOrder>>() {});
         List<MarketOrder> marketOrders = responseEntity.getBody();
-        if (marketOrders != null) {
+        if (marketOrders != null && !marketOrders.isEmpty()) {
             marketOrders.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
             return Optional.of(marketOrders.get(0).getPrice());
         } else {
