@@ -9,7 +9,7 @@ import wrongsides.cherrypickor.config.environment.LocalConfig;
 @SpringBootApplication
 public class CherrypickorApplication {
 
-	public static void main(String[] args) {
+	public static void main(String... args) {
 		SpringApplication.run(CherrypickorApplication.class, args);
 	}
 

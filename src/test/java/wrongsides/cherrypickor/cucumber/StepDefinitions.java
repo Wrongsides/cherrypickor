@@ -1,6 +1,5 @@
 package wrongsides.cherrypickor.cucumber;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
 import cucumber.api.java8.En;
 import org.apache.commons.io.FileUtils;
 import org.springframework.hateoas.Link;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import wrongsides.cherrypickor.CherrypickorApplication;
 import wrongsides.cherrypickor.config.environment.LocalConfig;
 import wrongsides.cherrypickor.domain.Asteroid;
 import wrongsides.cherrypickor.domain.collections.Asteroids;
@@ -32,20 +30,17 @@ public class StepDefinitions implements En {
     private Traverson traverson;
     private RestTemplate restTemplate;
     private ResponseEntity<Asteroids> asteroidsResponse;
-    private WireMockServer wireMockServer;
 
     public StepDefinitions() throws URISyntaxException {
 
         this.traverson = new Traverson(new URI(new LocalConfig().getApplicationRoot()), MediaTypes.HAL_JSON);
         this.restTemplate = new RestTemplate();
-        this.wireMockServer = new WireMockServer();
 
         Given("^Cherrypickor is running$", () -> {
-            CherrypickorApplication.main(new String[]{});
+            assertThat(traverson.follow("self").toEntity(String.class).getStatusCode()).isEqualTo(HttpStatus.OK);
         });
 
         And("^ESI services are available$", () -> {
-            wireMockServer.start();
             stubForRegion();
             stubForSpod();
             stubForSpodBuyOrder();
