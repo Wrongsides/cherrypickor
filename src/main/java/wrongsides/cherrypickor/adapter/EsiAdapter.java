@@ -17,13 +17,13 @@ public class EsiAdapter {
         this.restTemplate = restTemplate;
     }
 
-    public <T extends isSearchResult> Optional<String> find(String name, String category, Class<T> clazz) {
+    public <T extends Search> Optional<String> find(String name, String category, Class<T> clazz) {
         String url = String.format("%s/%s/search/?datasource=%s&categories=%s&search=%s&strict=true",
                 config.getEsiUrl(), config.getEsiVersion(), config.getEsiDatasource(), category, name);
 
         T object = restTemplate.getForObject(url, clazz);
 
-        if(object == null || object.getIds().isEmpty()) {
+        if (object == null || object.getIds().isEmpty()) {
             return Optional.empty();
         } else {
             return Optional.of(object.getIds().get(0));
