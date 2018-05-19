@@ -1,10 +1,10 @@
 package wrongsides.cherrypickor.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wrongsides.cherrypickor.domain.Asteroid;
 import wrongsides.cherrypickor.domain.Criteria;
 import wrongsides.cherrypickor.domain.Measure;
+import wrongsides.cherrypickor.domain.Unit;
 import wrongsides.cherrypickor.repository.IdRepository;
 
 import java.text.NumberFormat;
@@ -36,44 +36,31 @@ public class AsteroidsService {
     }
 
     public List<Asteroid> parseScannerOutput(String body) {
-
         List<Asteroid> asteroids = new ArrayList<>();
-
         String[] split = body.split("\\n");
-
         for (String s : split) {
             asteroids.add(stingToAsteroid(s));
         }
-
         return asteroids;
     }
 
     private Asteroid stingToAsteroid(String s) {
         Asteroid asteroid = new Asteroid();
-
         String[] split = s.split("\\t");
-
-        //Bright Spodumain	13,396	214,336 m3	188 km
-
         try {
             asteroid.setName(split[0]);
             asteroid.setQuantity(NumberFormat.getNumberInstance(Locale.UK).parse(split[1]).intValue());
-
-            String volumeStr = split[2];
-
-            Measure volume = new Measure();
-            volume.setValue(NumberFormat.getNumberInstance(Locale.UK).parse(volumeStr.substring(0, volumeStr.length() - 3)).intValue());
-            volume.setUnit(volumeStr.substring(volumeStr.length() - 2, volumeStr.length()));
-            asteroid.setVolume(volume);
-
-            String distanceStr = split[3];
-            Measure distance = new Measure();
-            distance.setValue(NumberFormat.getNumberInstance(Locale.UK).parse(distanceStr.substring(0, distanceStr.length() - 3)).intValue());
-            distance.setUnit(distanceStr.substring(distanceStr.length() - 2, distanceStr.length()));
-            asteroid.setDistance(distance);
+            asteroid.setVolume(toMeasure(split[2]));
+            asteroid.setDistance(toMeasure(split[3]));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return asteroid;
+    }
+
+    private Measure toMeasure(String measure) throws ParseException {
+        int volumeValue = NumberFormat.getNumberInstance(Locale.UK).parse(measure.substring(0, measure.length() - 3)).intValue();
+        Unit volumeUnit = Unit.from(measure.substring(measure.length() - 2, measure.length()));
+        return new Measure(volumeValue, volumeUnit);
     }
 }

@@ -10,6 +10,16 @@ public class Asteroid {
     private Measure distance;
     private BigDecimal value;
 
+    public Asteroid() { }
+
+    public Asteroid(String name, int quantity, Measure volume, Measure distance, BigDecimal value) {
+        this.name = name;
+        this.quantity = quantity;
+        this.volume = volume;
+        this.distance = distance;
+        this.value = value;
+    }
+
     public String getName() {
         return name;
     }
