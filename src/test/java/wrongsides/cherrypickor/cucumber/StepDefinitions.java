@@ -61,6 +61,7 @@ public class StepDefinitions implements En {
             List<Asteroid> asteroids = asteroidsResponse.getBody().getAsteroids();
             List<BigDecimal> values = asteroids.stream().map(Asteroid::getValue).collect(Collectors.toList());
 
+            assertThat(values).isNotEmpty();
             assertThat(values).isSortedAccordingTo(Comparator.reverseOrder());
         });
 
