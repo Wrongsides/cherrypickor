@@ -1,7 +1,6 @@
 package wrongsides.cherrypickor.service;
 
 import org.springframework.stereotype.Service;
-import wrongsides.cherrypickor.domain.Criteria;
 import wrongsides.cherrypickor.repository.PriceRepository;
 
 import java.math.BigDecimal;
@@ -15,7 +14,7 @@ public class ValuationService {
         this.priceRepository = priceRepository;
     }
 
-    public BigDecimal appraise(String asteroidId, String regionId, int quantity, Criteria valuationCriteria) {
+    public BigDecimal appraise(String asteroidId, String regionId, int quantity) {
         return priceRepository.getMaxBuyOrderFor(asteroidId, regionId)
                 .orElse(BigDecimal.ZERO)
                 .multiply(new BigDecimal(quantity));

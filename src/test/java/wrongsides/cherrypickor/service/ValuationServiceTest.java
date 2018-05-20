@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import wrongsides.cherrypickor.domain.Criteria;
 import wrongsides.cherrypickor.repository.PriceRepository;
 
 import java.math.BigDecimal;
@@ -33,7 +32,7 @@ public class ValuationServiceTest {
     public void appraise_givenAsteroidPrice10AndQuantity2_returns20() {
         when(priceRepository.getMaxBuyOrderFor(anyString(), anyString())).thenReturn(Optional.of(BigDecimal.TEN));
 
-        BigDecimal value = valuationService.appraise("asteroidId", "regionId", 2, Criteria.VALUE);
+        BigDecimal value = valuationService.appraise("asteroidId", "regionId", 2);
 
         verify(priceRepository).getMaxBuyOrderFor("asteroidId", "regionId");
         assertThat(value).isEqualTo(BigDecimal.valueOf(20L));
@@ -43,7 +42,7 @@ public class ValuationServiceTest {
     public void appraise_givenAsteroidWithNoPriceAndQuantity2_returns0() {
         when(priceRepository.getMaxBuyOrderFor(anyString(), anyString())).thenReturn(Optional.empty());
 
-        BigDecimal value = valuationService.appraise("asteroidId", "regionId", 2, Criteria.VALUE);
+        BigDecimal value = valuationService.appraise("asteroidId", "regionId", 2);
 
         verify(priceRepository).getMaxBuyOrderFor("asteroidId", "regionId");
         assertThat(value).isEqualTo(BigDecimal.ZERO);

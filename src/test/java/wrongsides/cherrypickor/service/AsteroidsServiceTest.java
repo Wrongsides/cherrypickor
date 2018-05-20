@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import wrongsides.cherrypickor.domain.Asteroid;
-import wrongsides.cherrypickor.domain.Criteria;
 import wrongsides.cherrypickor.domain.Measure;
 import wrongsides.cherrypickor.domain.Unit;
 import wrongsides.cherrypickor.repository.IdRepository;
@@ -45,11 +44,11 @@ public class AsteroidsServiceTest {
         List<Asteroid> asteroids = Arrays.asList(spod1, spod2, crock);
         when(idRepository.findRegion(anyString())).thenReturn(Optional.of("regionId"));
         when(idRepository.findItemTypeId(anyString())).thenReturn(Optional.of("itemTypeId"));
-        when(valuationService.appraise(anyString(), anyString(), eq(100), any(Criteria.class))).thenReturn(new BigDecimal("100"));
-        when(valuationService.appraise(anyString(), anyString(), eq(90), any(Criteria.class))).thenReturn(new BigDecimal("900"));
-        when(valuationService.appraise(anyString(), anyString(), eq(50), any(Criteria.class))).thenReturn(new BigDecimal("500"));
+        when(valuationService.appraise(anyString(), anyString(), eq(100))).thenReturn(new BigDecimal("100"));
+        when(valuationService.appraise(anyString(), anyString(), eq(90))).thenReturn(new BigDecimal("900"));
+        when(valuationService.appraise(anyString(), anyString(), eq(50))).thenReturn(new BigDecimal("500"));
 
-        asteroidsService.sortByValue(asteroids, Criteria.VALUE);
+        asteroidsService.sortByValue(asteroids);
 
         assertThat(asteroids).containsExactly(spod2, crock, spod1);
     }

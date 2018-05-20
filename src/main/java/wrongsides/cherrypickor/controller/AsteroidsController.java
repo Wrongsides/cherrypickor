@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import wrongsides.cherrypickor.controller.resource.AsteroidsResource;
-import wrongsides.cherrypickor.domain.Criteria;
 import wrongsides.cherrypickor.domain.collections.Asteroids;
 import wrongsides.cherrypickor.service.AsteroidsService;
 
@@ -51,7 +50,7 @@ public class AsteroidsController {
             asteroids.setAsteroids(asteroidsService.parseScannerOutput(body));
         }
 
-        asteroidsService.sortByValue(asteroids.getAsteroids(), Criteria.VALUE);
+        asteroidsService.sortByValue(asteroids.getAsteroids());
 
         asteroidsResource.setAsteroids(asteroids.getAsteroids());
         return asteroidsResource;

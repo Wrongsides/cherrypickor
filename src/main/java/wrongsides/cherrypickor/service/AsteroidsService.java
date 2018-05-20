@@ -2,7 +2,6 @@ package wrongsides.cherrypickor.service;
 
 import org.springframework.stereotype.Service;
 import wrongsides.cherrypickor.domain.Asteroid;
-import wrongsides.cherrypickor.domain.Criteria;
 import wrongsides.cherrypickor.domain.Measure;
 import wrongsides.cherrypickor.domain.Unit;
 import wrongsides.cherrypickor.repository.IdRepository;
@@ -24,11 +23,11 @@ public class AsteroidsService {
         this.valuationService = valuationService;
     }
 
-    public void sortByValue(List<Asteroid> asteroids, Criteria valuationCriteria) {
+    public void sortByValue(List<Asteroid> asteroids) {
         idRepository.findRegion("The Forge").ifPresent(regionId -> {
             asteroids.forEach((Asteroid asteroid) -> {
                 idRepository.findItemTypeId(asteroid.getName()).ifPresent(asteroidId -> {
-                    asteroid.setValue(valuationService.appraise(asteroidId, regionId, asteroid.getQuantity(), valuationCriteria));
+                    asteroid.setValue(valuationService.appraise(asteroidId, regionId, asteroid.getQuantity()));
                 });
             });
             asteroids.sort((a1, a2) -> a2.getValue().compareTo(a1.getValue()));

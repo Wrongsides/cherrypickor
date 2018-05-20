@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import wrongsides.cherrypickor.controller.resource.AsteroidsResource;
 import wrongsides.cherrypickor.domain.Asteroid;
-import wrongsides.cherrypickor.domain.Criteria;
 import wrongsides.cherrypickor.domain.collections.Asteroids;
 import wrongsides.cherrypickor.service.AsteroidsService;
 
@@ -50,7 +49,7 @@ public class AsteroidsControllerTest {
         AsteroidsResource asteroidsResource = asteroidsController.post(body);
 
         verify(objectMapper).readValue(body, Asteroids.class);
-        verify(asteroidsService).sortByValue(asteroidList, Criteria.VALUE);
+        verify(asteroidsService).sortByValue(asteroidList);
         assertThat(asteroidsResource.getAsteroids()).isEqualTo(asteroidList);
         assertThat(asteroidsResource.getLinks()).extracting("rel", "href")
                 .containsExactly(Tuple.tuple("self", "/asteroids"), Tuple.tuple("root", "/"));
@@ -64,7 +63,7 @@ public class AsteroidsControllerTest {
         AsteroidsResource asteroidsResource = asteroidsController.post(body);
 
         verify(asteroidsService).parseScannerOutput(body);
-        verify(asteroidsService).sortByValue(asteroidList, Criteria.VALUE);
+        verify(asteroidsService).sortByValue(asteroidList);
         assertThat(asteroidsResource.getAsteroids()).isEqualTo(asteroidList);
         assertThat(asteroidsResource.getLinks()).extracting("rel", "href")
                 .containsExactly(Tuple.tuple("self", "/asteroids"), Tuple.tuple("root", "/"));
