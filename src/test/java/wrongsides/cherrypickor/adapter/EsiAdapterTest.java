@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.client.RestTemplate;
 import wrongsides.cherrypickor.config.environment.Config;
-import wrongsides.cherrypickor.domain.InventoryType;
+import wrongsides.cherrypickor.domain.Item;
 
 import java.util.Optional;
 
@@ -37,28 +37,28 @@ public class EsiAdapterTest {
 
     @Test
     public void find_givenBrightSpodumain_returnsOptionalOf17466() {
-        InventoryType inventoryType = new InventoryType();
-        inventoryType.getIds().add("17466");
-        when(restTemplate.getForObject(anyString(), eq(InventoryType.class))).thenReturn(inventoryType);
+        Item item = new Item();
+        item.getIds().add("17466");
+        when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(item);
 
-        Optional<String> itemTypeId = esiAdapter.find("Bright Spodumain", "inventory_type", InventoryType.class);
+        Optional<String> itemTypeId = esiAdapter.find("Bright Spodumain", "inventory_type", Item.class);
 
-        verify(restTemplate).getForObject("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=Bright Spodumain&strict=true", InventoryType.class);
+        verify(restTemplate).getForObject("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=Bright Spodumain&strict=true", Item.class);
         assertThat(itemTypeId).isEqualTo(Optional.of("17466"));
     }
 
     @Test
     public void find_givenNonExistantItem_returnsEmpty() {
-        when(restTemplate.getForObject(anyString(), eq(InventoryType.class))).thenReturn(new InventoryType());
+        when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(new Item());
 
-        Optional<String> itemTypeId = esiAdapter.find("NonExistantItem", "inventory_type", InventoryType.class);
+        Optional<String> itemTypeId = esiAdapter.find("NonExistantItem", "inventory_type", Item.class);
 
-        verify(restTemplate).getForObject("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=NonExistantItem&strict=true", InventoryType.class);
+        verify(restTemplate).getForObject("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=NonExistantItem&strict=true", Item.class);
         assertThat(itemTypeId).isEmpty();
     }
 
     @Test
     public void find_givenNullRegion_returnsEmpty() {
-        assertThat(esiAdapter.find(null, "inventory_type", InventoryType.class)).isEmpty();
+        assertThat(esiAdapter.find(null, "inventory_type", Item.class)).isEmpty();
     }
 }

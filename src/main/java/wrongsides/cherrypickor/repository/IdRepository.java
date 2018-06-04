@@ -2,7 +2,7 @@ package wrongsides.cherrypickor.repository;
 
 import org.springframework.stereotype.Repository;
 import wrongsides.cherrypickor.adapter.EsiAdapter;
-import wrongsides.cherrypickor.domain.InventoryType;
+import wrongsides.cherrypickor.domain.Item;
 import wrongsides.cherrypickor.domain.Region;
 
 import java.util.Optional;
@@ -17,7 +17,7 @@ public class IdRepository {
     }
 
     public Optional<String> findItemTypeId(String itemName) {
-        return esiAdapter.find(itemName, "inventory_type", InventoryType.class);
+        return esiAdapter.find(itemName, "inventory_type", Item.class);
     }
 
     public Optional<String> findRegion(String regionName) {

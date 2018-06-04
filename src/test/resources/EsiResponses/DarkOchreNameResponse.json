@@ -1,0 +1,47 @@
+[
+  {
+    "category": "inventory_type",
+    "id": 1232,
+    "name": "Dark Ochre"
+  },
+  {
+    "category": "inventory_type",
+    "id": 46675,
+    "name": "Jet Ochre"
+  },
+  {
+    "category": "inventory_type",
+    "id": 46694,
+    "name": "Compressed Jet Ochre"
+  },
+  {
+    "category": "inventory_type",
+    "id": 28394,
+    "name": "Compressed Dark Ochre"
+  },
+  {
+    "category": "inventory_type",
+    "id": 28395,
+    "name": "Compressed Obsidian Ochre"
+  },
+  {
+    "category": "inventory_type",
+    "id": 28396,
+    "name": "Compressed Onyx Ochre"
+  },
+  {
+    "category": "inventory_type",
+    "id": 28623,
+    "name": "Oeryl"
+  },
+  {
+    "category": "inventory_type",
+    "id": 17436,
+    "name": "Onyx Ochre"
+  },
+  {
+    "category": "inventory_type",
+    "id": 17437,
+    "name": "Obsidian Ochre"
+  }
+]

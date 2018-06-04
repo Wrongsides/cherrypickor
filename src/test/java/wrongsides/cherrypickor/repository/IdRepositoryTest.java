@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import wrongsides.cherrypickor.adapter.EsiAdapter;
-import wrongsides.cherrypickor.domain.InventoryType;
+import wrongsides.cherrypickor.domain.Item;
 import wrongsides.cherrypickor.domain.Region;
 
 import static org.mockito.Mockito.verify;
@@ -29,7 +29,7 @@ public class IdRepositoryTest {
 
         idRepository.findItemTypeId("Bright Spodumain");
 
-        verify(esiAdapter).find("Bright Spodumain", "inventory_type", InventoryType.class);
+        verify(esiAdapter).find("Bright Spodumain", "inventory_type", Item.class);
     }
 
     @Test
