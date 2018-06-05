@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.client.RestTemplate;
 import wrongsides.cherrypickor.config.environment.Config;
+import wrongsides.cherrypickor.domain.Category;
 import wrongsides.cherrypickor.domain.Item;
 
 import java.util.Optional;
@@ -37,8 +38,8 @@ public class EsiAdapterTest {
 
     @Test
     public void find_givenBrightSpodumain_returnsOptionalOf17466() {
-        Item item = new Item();
-        item.getIds().add("17466");
+        Item item = new Item(Category.INVENTORY_TYPE, "Bright Spodumain");
+        item.getSearchIds().add("17466");
         when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(item);
 
         Optional<String> itemTypeId = esiAdapter.find("Bright Spodumain", "inventory_type", Item.class);
@@ -49,7 +50,7 @@ public class EsiAdapterTest {
 
     @Test
     public void find_givenNonExistantItem_returnsEmpty() {
-        when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(new Item());
+        when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(new Item(Category.INVENTORY_TYPE, "NonExistantItem"));
 
         Optional<String> itemTypeId = esiAdapter.find("NonExistantItem", "inventory_type", Item.class);
 

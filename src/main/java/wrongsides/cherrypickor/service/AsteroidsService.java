@@ -1,9 +1,7 @@
 package wrongsides.cherrypickor.service;
 
 import org.springframework.stereotype.Service;
-import wrongsides.cherrypickor.domain.Asteroid;
-import wrongsides.cherrypickor.domain.Measure;
-import wrongsides.cherrypickor.domain.Unit;
+import wrongsides.cherrypickor.domain.*;
 import wrongsides.cherrypickor.repository.IdRepository;
 
 import java.text.NumberFormat;
@@ -24,9 +22,9 @@ public class AsteroidsService {
     }
 
     public void sortByValue(List<Asteroid> asteroids) {
-        idRepository.findRegion("The Forge").ifPresent(regionId -> {
+        idRepository.findRegionId("The Forge").ifPresent(regionId -> {
             asteroids.forEach((Asteroid asteroid) -> {
-                idRepository.findItemTypeId(asteroid.getName()).ifPresent(asteroidId -> {
+                idRepository.findItemTypeId(new Item(Category.INVENTORY_TYPE, asteroid.getName())).ifPresent(asteroidId -> {
                     asteroid.setValue(valuationService.appraise(asteroidId, regionId, asteroid.getQuantity()));
                 });
             });

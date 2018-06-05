@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import wrongsides.cherrypickor.domain.Asteroid;
+import wrongsides.cherrypickor.domain.Item;
 import wrongsides.cherrypickor.domain.Measure;
 import wrongsides.cherrypickor.domain.Unit;
 import wrongsides.cherrypickor.repository.IdRepository;
@@ -42,8 +43,8 @@ public class AsteroidsServiceTest {
         Asteroid spod2 = new Asteroid("Bright Spodumain", 90, null, null, BigDecimal.TEN);
         Asteroid crock = new Asteroid("Sharp Crokite", 50, null, null, BigDecimal.TEN);
         List<Asteroid> asteroids = Arrays.asList(spod1, spod2, crock);
-        when(idRepository.findRegion(anyString())).thenReturn(Optional.of("regionId"));
-        when(idRepository.findItemTypeId(anyString())).thenReturn(Optional.of("itemTypeId"));
+        when(idRepository.findRegionId(anyString())).thenReturn(Optional.of("regionId"));
+        when(idRepository.findItemTypeId(any(Item.class))).thenReturn(Optional.of("itemTypeId"));
         when(valuationService.appraise(anyString(), anyString(), eq(100))).thenReturn(new BigDecimal("100"));
         when(valuationService.appraise(anyString(), anyString(), eq(90))).thenReturn(new BigDecimal("900"));
         when(valuationService.appraise(anyString(), anyString(), eq(50))).thenReturn(new BigDecimal("500"));

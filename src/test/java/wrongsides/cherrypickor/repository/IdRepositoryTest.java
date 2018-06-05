@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import wrongsides.cherrypickor.adapter.EsiAdapter;
+import wrongsides.cherrypickor.domain.Category;
 import wrongsides.cherrypickor.domain.Item;
 import wrongsides.cherrypickor.domain.Region;
 
@@ -27,15 +28,15 @@ public class IdRepositoryTest {
     @Test
     public void findItemTypeId_givenBrightSpodumain_delegatesToEsiAdapter() {
 
-        idRepository.findItemTypeId("Bright Spodumain");
+        idRepository.findItemTypeId(new Item(Category.INVENTORY_TYPE, "Bright Spodumain"));
 
         verify(esiAdapter).find("Bright Spodumain", "inventory_type", Item.class);
     }
 
     @Test
-    public void findRegion_givenTheForge_delegatesToEsiAdapte() {
+    public void findRegion_givenTheForge_delegatesToEsiAdapter() {
 
-        idRepository.findRegion("The Forge");
+        idRepository.findRegionId("The Forge");
 
         verify(esiAdapter).find("The Forge", "region", Region.class);
     }

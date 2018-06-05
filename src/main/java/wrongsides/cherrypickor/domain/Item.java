@@ -1,27 +1,38 @@
 package wrongsides.cherrypickor.domain;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import wrongsides.cherrypickor.adapter.Search;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Item extends Search {
 
     @JsonAlias("inventory_type")
-    private List<String> ids;
+    private List<String> searchIds;
 
     private String category;
     private String name;
-    private String id;
+    private String typeId;
+    private String groupId;
+    private String categoryId;
+    private List<String> categoryGroups;
+    private List<String> categoryTypes;
 
-    public List<String> getIds() {
-        if (ids == null) {
-            ids = new ArrayList<>();
+    public Item() {
+    }
+
+    public Item(Category category, String name) {
+        this.category = category.toString();
+        this.name = name;
+    }
+
+    @Override
+    public List<String> getSearchIds() {
+        if (searchIds == null) {
+            searchIds = new ArrayList<>();
         }
-        return ids;
+        return searchIds;
     }
 
     public String getCategory() {
@@ -40,21 +51,57 @@ public class Item extends Search {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
+    public String getTypeId() {
+        return typeId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setTypeId(String typeId) {
+        this.typeId = typeId;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public List<String> getCategoryGroups() {
+        return categoryGroups;
+    }
+
+    public void setCategoryGroups(List<String> categoryGroups) {
+        this.categoryGroups = categoryGroups;
+    }
+
+    public List<String> getCategoryTypes() {
+        return categoryTypes;
+    }
+
+    public void setCategoryTypes(List<String> categoryTypes) {
+        this.categoryTypes = categoryTypes;
     }
 
     @Override
     public String toString() {
         return "Item{" +
-                "ids=" + ids +
+                "searchIds=" + searchIds +
                 ", category='" + category + '\'' +
                 ", name='" + name + '\'' +
-                ", id='" + id + '\'' +
+                ", typeId='" + typeId + '\'' +
+                ", groupId='" + groupId + '\'' +
+                ", categoryId='" + categoryId + '\'' +
+                ", categoryGroups=" + categoryGroups +
+                ", categoryTypes=" + categoryTypes +
                 '}';
     }
 }
