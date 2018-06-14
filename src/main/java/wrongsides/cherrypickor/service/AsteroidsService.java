@@ -35,24 +35,23 @@ public class AsteroidsService {
     public List<Asteroid> parseScannerOutput(String body) {
         List<Asteroid> asteroids = new ArrayList<>();
         String[] split = body.split("\\n");
-        for (String s : split) {
-            asteroids.add(stingToAsteroid(s));
+        try {
+            for (String s : split) {
+                asteroids.add(stingToAsteroid(s));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return asteroids;
     }
 
-    private Asteroid stingToAsteroid(String s) {
-        Asteroid asteroid = new Asteroid();
+    private Asteroid stingToAsteroid(String s) throws ParseException {
         String[] split = s.split("\\t");
-        try {
-            asteroid.setName(split[0]);
-            asteroid.setQuantity(NumberFormat.getNumberInstance(Locale.UK).parse(split[1]).intValue());
-            asteroid.setVolume(toMeasure(split[2]));
-            asteroid.setDistance(toMeasure(split[3]));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return asteroid;
+        return Asteroid.of(split[0])
+                .withQuantity(NumberFormat.getNumberInstance(Locale.UK).parse(split[1]).intValue())
+                .withVolume(toMeasure(split[2]))
+                .withDistance(toMeasure(split[3]))
+                .build();
     }
 
     private Measure toMeasure(String measure) throws ParseException {
