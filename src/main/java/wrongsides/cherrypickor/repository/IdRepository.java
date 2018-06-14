@@ -36,10 +36,10 @@ public class IdRepository {
     }
 
     public List<String> findGroupIds(String categoryId) {
-        return esiAdapter.find(categoryId, "categories").orElse(new ArrayList<>());
+        return esiAdapter.get(categoryId, "categories").orElse(new ArrayList<>());
     }
 
     public List<String> findTypeIds(String groupId) {
-        return esiAdapter.find(groupId, "groups").orElse(new ArrayList<>());
+        return esiAdapter.get(groupId, "groups").orElse(new ArrayList<>());
     }
 }

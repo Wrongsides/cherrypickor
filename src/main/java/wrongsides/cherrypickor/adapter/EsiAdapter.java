@@ -18,7 +18,10 @@ public class EsiAdapter {
         this.restTemplate = restTemplate;
     }
 
-    public Optional<List<String>> find(String name, String category) {
+    public Optional<List<String>> get(String id, String category) {
+        String url = String.format("%s/%s/universe/%s/%s",
+                config.getEsiUrl(), config.getEsiVersion(), category, id);
+
         return Optional.empty();
     }
 
