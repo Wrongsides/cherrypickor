@@ -10,14 +10,19 @@ public class Item extends Search {
 
     @JsonAlias("inventory_type")
     private List<String> searchIds;
+    @JsonAlias("type_id")
+    private String typeId;
+    @JsonAlias("group_id")
+    private String groupId;
+    @JsonAlias("category_id")
+    private String categoryId;
+    @JsonAlias("groups")
+    private List<String> categoryGroups;
+    @JsonAlias("types")
+    private List<String> categoryTypes;
 
     private String category;
     private String name;
-    private String typeId;
-    private String groupId;
-    private String categoryId;
-    private List<String> categoryGroups;
-    private List<String> categoryTypes;
 
     public Item() {
     }
@@ -89,19 +94,5 @@ public class Item extends Search {
 
     public void setCategoryTypes(List<String> categoryTypes) {
         this.categoryTypes = categoryTypes;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "searchIds=" + searchIds +
-                ", category='" + category + '\'' +
-                ", name='" + name + '\'' +
-                ", typeId='" + typeId + '\'' +
-                ", groupId='" + groupId + '\'' +
-                ", categoryId='" + categoryId + '\'' +
-                ", categoryGroups=" + categoryGroups +
-                ", categoryTypes=" + categoryTypes +
-                '}';
     }
 }

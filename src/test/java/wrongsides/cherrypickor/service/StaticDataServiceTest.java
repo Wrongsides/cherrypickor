@@ -25,7 +25,7 @@ public class StaticDataServiceTest {
     public void setUp() {
         staticDataService = new StaticDataService(idRepository);
         when(idRepository.findItemTypeId(any())).thenReturn(Optional.of("1232"));
-        when(idRepository.findGroupIds(any())).thenReturn(Lists.newArrayList("345"));
+        when(idRepository.setGroupIds(any())).thenReturn(Lists.newArrayList("345"));
     }
 
     @Test
