@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import wrongsides.cherrypickor.domain.*;
 import wrongsides.cherrypickor.repository.IdRepository;
+import wrongsides.cherrypickor.repository.ItemRepository;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -27,11 +28,15 @@ public class AsteroidsServiceTest {
     @Mock
     private IdRepository idRepository;
     @Mock
+    private ItemRepository itemRepository;
+    @Mock
     private ValuationService valuationService;
+    @Mock
+    private Item item;
 
     @Before
     public void setUp() {
-        asteroidsService = new AsteroidsService(idRepository, valuationService);
+        asteroidsService = new AsteroidsService(idRepository, itemRepository, valuationService);
     }
 
     @Test
@@ -40,8 +45,9 @@ public class AsteroidsServiceTest {
         Asteroid spod2 = Asteroid.of("Bright Spodumain").withQuantity(90).withValue(BigDecimal.TEN).build();
         Asteroid crock = Asteroid.of("Sharp Crokite").withQuantity(50).withValue(BigDecimal.TEN).build();
         List<Asteroid> asteroids = Arrays.asList(spod1, spod2, crock);
-        when(idRepository.findRegionId(anyString())).thenReturn(Optional.of("regionId"));
-        when(idRepository.findItemTypeId(any(Item.class))).thenReturn(Optional.of("itemTypeId"));
+        when(idRepository.findRegionId(anyString())).thenReturn("regionId");
+        when(itemRepository.getByName(anyString())).thenReturn(item);
+        when(item.getTypeId()).thenReturn("itemTypeId");
         when(valuationService.appraise(anyString(), anyString(), eq(100))).thenReturn(new BigDecimal("100"));
         when(valuationService.appraise(anyString(), anyString(), eq(90))).thenReturn(new BigDecimal("900"));
         when(valuationService.appraise(anyString(), anyString(), eq(50))).thenReturn(new BigDecimal("500"));

@@ -1,11 +1,13 @@
 package wrongsides.cherrypickor.domain;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import wrongsides.cherrypickor.adapter.Search;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Item extends Search {
 
     @JsonAlias("inventory_type")
@@ -94,5 +96,14 @@ public class Item extends Search {
 
     public void setCategoryTypes(List<String> categoryTypes) {
         this.categoryTypes = categoryTypes;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "typeId='" + typeId + '\'' +
+                ", category='" + category + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

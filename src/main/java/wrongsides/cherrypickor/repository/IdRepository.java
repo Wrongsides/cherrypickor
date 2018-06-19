@@ -1,9 +1,9 @@
 package wrongsides.cherrypickor.repository;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import wrongsides.cherrypickor.adapter.EsiAdapter;
 import wrongsides.cherrypickor.domain.Item;
-import wrongsides.cherrypickor.domain.ItemSummary;
 import wrongsides.cherrypickor.domain.Region;
 
 import java.util.List;
@@ -18,17 +18,17 @@ public class IdRepository {
         this.esiAdapter = esiAdapter;
     }
 
-
-    public Optional<String> findRegionId(String regionName) {
-        return esiAdapter.find(regionName, "region", Region.class);
+    @Cacheable(value = "regions")
+    public String findRegionId(String regionName) {
+        return esiAdapter.find(regionName, "region", Region.class).orElse(null);
     }
 
-    public Optional<String> findItemTypeId(Item item) {
-        return esiAdapter.find(item.getName(), item.getCategory(), item.getClass());
+    public String findItemTypeId(Item item) {
+        return esiAdapter.find(item.getName(), item.getCategory(), item.getClass()).orElse(null);
     }
 
     public String setGroupId(Item item) {
-        return esiAdapter.setGroupId(item,"types").getGroupId();
+        return esiAdapter.setGroupId(item, "types").getGroupId();
     }
 
     public String setCategoryId(Item item) {
@@ -41,9 +41,5 @@ public class IdRepository {
 
     public List<String> setTypeIds(String groupId) {
         return esiAdapter.getCollection(groupId, "groups");
-    }
-
-    public List<ItemSummary> getItemSummaries(List<String> typeIds) {
-        return esiAdapter.getItemSummaries(typeIds);
     }
 }

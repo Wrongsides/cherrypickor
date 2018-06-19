@@ -23,9 +23,9 @@ public class PriceRepository {
         this.restTemplate = restTemplate;
     }
 
-    public Optional<BigDecimal> getMaxBuyOrderFor(String asteroidId, String regionId) {
+    public Optional<BigDecimal> getMaxBuyOrderFor(String typeId, String regionId) {
         String url = String.format("%s/%s/markets/%s/orders/?datasource=%s&order_type=buy&type_id=%s",
-                config.getEsiUrl(), config.getEsiVersion(), regionId, config.getEsiDatasource(), asteroidId);
+                config.getEsiUrl(), config.getEsiVersion(), regionId, config.getEsiDatasource(), typeId);
         ResponseEntity<List<MarketOrder>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<MarketOrder>>() {});
         List<MarketOrder> marketOrders = responseEntity.getBody();
         if (marketOrders != null && !marketOrders.isEmpty()) {

@@ -7,8 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import wrongsides.cherrypickor.repository.IdRepository;
-
-import java.util.Optional;
+import wrongsides.cherrypickor.repository.ItemRepository;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -20,11 +19,13 @@ public class StaticDataServiceTest {
 
     @Mock
     private IdRepository idRepository;
+    @Mock
+    private ItemRepository itemRepository;
 
     @Before
     public void setUp() {
-        staticDataService = new StaticDataService(idRepository);
-        when(idRepository.findItemTypeId(any())).thenReturn(Optional.of("1232"));
+        staticDataService = new StaticDataService(idRepository, itemRepository);
+        when(idRepository.findItemTypeId(any())).thenReturn("1232");
         when(idRepository.setGroupIds(any())).thenReturn(Lists.newArrayList("345"));
     }
 

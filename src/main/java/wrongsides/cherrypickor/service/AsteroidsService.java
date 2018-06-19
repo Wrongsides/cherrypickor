@@ -3,6 +3,7 @@ package wrongsides.cherrypickor.service;
 import org.springframework.stereotype.Service;
 import wrongsides.cherrypickor.domain.*;
 import wrongsides.cherrypickor.repository.IdRepository;
+import wrongsides.cherrypickor.repository.ItemRepository;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -14,22 +15,31 @@ import java.util.Locale;
 public class AsteroidsService {
 
     private IdRepository idRepository;
+    private ItemRepository itemRepository;
     private ValuationService valuationService;
 
-    public AsteroidsService(IdRepository idRepository, ValuationService valuationService) {
+    public AsteroidsService(IdRepository idRepository, ItemRepository itemRepository, ValuationService valuationService) {
         this.idRepository = idRepository;
+        this.itemRepository = itemRepository;
         this.valuationService = valuationService;
     }
 
+    public Asteroid getAsteroid(String name) {
+        Item item = itemRepository.getByName(name);
+        return Asteroid.of(item.getName()).build();
+    }
+
     public void sortByValue(List<Asteroid> asteroids) {
-        idRepository.findRegionId("The Forge").ifPresent(regionId -> {
+        String regionId = idRepository.findRegionId("The Forge");
+        if (regionId != null) {
             asteroids.forEach((Asteroid asteroid) -> {
-                idRepository.findItemTypeId(new Item(Category.INVENTORY_TYPE, asteroid.getName())).ifPresent(asteroidId -> {
-                    asteroid.setValue(valuationService.appraise(asteroidId, regionId, asteroid.getQuantity()));
-                });
+                Item item = itemRepository.getByName(asteroid.getName());
+                if (item != null) {
+                    asteroid.setValue(valuationService.appraise(item.getTypeId(), regionId, asteroid.getQuantity()));
+                }
             });
             asteroids.sort((a1, a2) -> a2.getValue().compareTo(a1.getValue()));
-        });
+        }
     }
 
     public List<Asteroid> parseScannerOutput(String body) {

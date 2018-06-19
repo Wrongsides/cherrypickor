@@ -1,12 +1,10 @@
 package wrongsides.cherrypickor.adapter;
 
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import wrongsides.cherrypickor.config.environment.Config;
+import wrongsides.cherrypickor.domain.Category;
 import wrongsides.cherrypickor.domain.Item;
-import wrongsides.cherrypickor.domain.ItemSummary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +44,7 @@ public class EsiAdapter {
         Item object = restTemplate.getForObject(url, Item.class);
 
         List<String> result = new ArrayList<>();
-        if("categories".equals(category)) {
+        if ("categories".equals(category)) {
             result = object.getCategoryGroups();
         } else if ("groups".equals(category)) {
             result = object.getCategoryTypes();
@@ -54,13 +52,25 @@ public class EsiAdapter {
         return result;
     }
 
-    public List<ItemSummary> getItemSummaries(List<String> typeIds) {
-        String url = String.format("%s/%s/universe/names/", config.getEsiUrl(), config.getEsiVersion());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Object> requestEntity = new HttpEntity<Object>(typeIds,headers);
-        ResponseEntity<List<ItemSummary>> itemsResponse = restTemplate.exchange(url, HttpMethod.POST, requestEntity, new ParameterizedTypeReference<List<ItemSummary>>() { });
-        return itemsResponse.getBody();
+    public Item find(String typeId) {
+        String url = String.format("%s/%s/universe/types/%s", config.getEsiUrl(), config.getEsiVersion(), typeId);
+        Item result = restTemplate.getForObject(url, Item.class);
+        if (result != null) {
+            result.setCategory(Category.INVENTORY_TYPE.toString());
+        }
+        return result;
+    }
+
+    public Item findByName(String name) {
+        String url = String.format("%s/%s/search/?datasource=%s&categories=%s&search=%s&strict=true",
+                config.getEsiUrl(), config.getEsiVersion(), config.getEsiDatasource(), Category.INVENTORY_TYPE, name);
+        Item result = restTemplate.getForObject(url, Item.class);
+        if (result != null) {
+            result.setName(name);
+            result.setCategory(Category.INVENTORY_TYPE.toString());
+            result.setTypeId(result.getSearchIds().get(0));
+        }
+        return result;
     }
 
     public <T extends Search> Optional<String> find(String name, String category, Class<T> clazz) {

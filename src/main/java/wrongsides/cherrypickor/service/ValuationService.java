@@ -14,8 +14,8 @@ public class ValuationService {
         this.priceRepository = priceRepository;
     }
 
-    public BigDecimal appraise(String asteroidId, String regionId, int quantity) {
-        return priceRepository.getMaxBuyOrderFor(asteroidId, regionId)
+    public BigDecimal appraise(String typeId, String regionId, int quantity) {
+        return priceRepository.getMaxBuyOrderFor(typeId, regionId)
                 .orElse(BigDecimal.ZERO)
                 .multiply(new BigDecimal(quantity));
     }
