@@ -1,12 +1,12 @@
 package wrongsides.cherrypickor.service;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import wrongsides.cherrypickor.domain.Category;
 import wrongsides.cherrypickor.domain.Item;
 import wrongsides.cherrypickor.repository.IdRepository;
 import wrongsides.cherrypickor.repository.ItemRepository;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -30,20 +30,20 @@ public class StaticDataService {
         idRepository.setGroupId(rootAsteroid);
         idRepository.setCategoryId(rootAsteroid);
 
-        idRepository.setGroupIds(rootAsteroid.getCategoryId()).forEach((String groupId) -> {
-            List<String> typeIds = idRepository.setTypeIds(groupId);
-            if (!typeIds.isEmpty()) {
-                CompletableFuture[] items = new CompletableFuture[typeIds.size()];
-                for (int i = 0; i < typeIds.size(); i++) {
-                    items[i] = getItemsByTypeId(typeIds.get(i));
-                }
-                CompletableFuture.allOf(items).join();
+        List<String> typeIds = new LinkedList<>();
+        idRepository.setGroupIds(rootAsteroid.getCategoryId())
+                .forEach((String groupId) -> typeIds.addAll(idRepository.setTypeIds(groupId)));
+
+        if (!typeIds.isEmpty()) {
+            CompletableFuture[] items = new CompletableFuture[typeIds.size()];
+            for (int i = 0; i < typeIds.size(); i++) {
+                items[i] = getItemsByTypeId(typeIds.get(i));
             }
-        });
+            CompletableFuture.allOf(items).join();
+        }
     }
 
-    @Async
-    protected CompletableFuture<Item> getItemsByTypeId(String typeId) {
+    private CompletableFuture<Item> getItemsByTypeId(String typeId) {
         return CompletableFuture.supplyAsync(() -> itemRepository.getByTypeId(typeId));
     }
 }
