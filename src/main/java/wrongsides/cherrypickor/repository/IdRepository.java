@@ -35,11 +35,11 @@ public class IdRepository {
         return esiAdapter.setCategoryId(item, "groups").getCategoryId();
     }
 
-    public List<String> setGroupIds(String categoryId) {
+    public List<String> getGroupIds(String categoryId) {
         return esiAdapter.getCollection(categoryId, "categories");
     }
 
-    public List<String> setTypeIds(String groupId) {
+    public List<String> getTypeIds(String groupId) {
         return esiAdapter.getCollection(groupId, "groups");
     }
 }

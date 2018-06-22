@@ -31,8 +31,8 @@ public class StaticDataService {
         idRepository.setCategoryId(rootAsteroid);
 
         List<String> typeIds = new LinkedList<>();
-        idRepository.setGroupIds(rootAsteroid.getCategoryId())
-                .forEach((String groupId) -> typeIds.addAll(idRepository.setTypeIds(groupId)));
+        idRepository.getGroupIds(rootAsteroid.getCategoryId())
+                .forEach((String groupId) -> typeIds.addAll(idRepository.getTypeIds(groupId)));
 
         if (!typeIds.isEmpty()) {
             CompletableFuture[] items = new CompletableFuture[typeIds.size()];
