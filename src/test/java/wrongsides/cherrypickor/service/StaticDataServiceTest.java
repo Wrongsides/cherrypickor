@@ -31,7 +31,7 @@ public class StaticDataServiceTest {
 
     @Test
     public void loadStaticData_doesStuff() {
-        staticDataService.loadStaticData();
+        staticDataService.refreshAsteroidStaticData();
     }
 
 }

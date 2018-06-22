@@ -1,5 +1,6 @@
 package wrongsides.cherrypickor.repository;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -25,5 +26,11 @@ public class SimpleItemRepository implements ItemRepository {
     @CachePut(value = "items", key = "#result.name", condition = "#result != null")
     public Item getByTypeId(String typeId) {
         return esiAdapter.find(typeId);
+    }
+
+    @Override
+    @CacheEvict(value = "items", allEntries = true)
+    public void removeAll() {
+        //remove all items from cache
     }
 }

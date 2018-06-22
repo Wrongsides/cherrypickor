@@ -8,4 +8,5 @@ public interface ItemRepository {
 
     Item getByTypeId(String typeId);
 
+    void removeAll();
 }

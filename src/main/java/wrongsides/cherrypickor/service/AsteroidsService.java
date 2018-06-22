@@ -25,8 +25,7 @@ public class AsteroidsService {
     }
 
     public Asteroid getAsteroid(String name) {
-        Item item = itemRepository.getByName(name);
-        return Asteroid.of(item.getName()).build();
+        return Asteroid.of(itemRepository.getByName(name).getName()).build();
     }
 
     public void sortByValue(List<Asteroid> asteroids) {

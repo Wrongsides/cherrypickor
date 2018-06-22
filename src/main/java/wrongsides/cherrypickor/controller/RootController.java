@@ -32,7 +32,7 @@ public class RootController {
 
     @PostMapping
     public String post(){
-        staticDataService.loadStaticData();
-        return "loading static data...";
+        staticDataService.refreshAsteroidStaticData();
+        return "Asteroid item static data refreshed.";
     }
 }
