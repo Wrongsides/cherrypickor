@@ -21,11 +21,23 @@ public class EsiAdapter {
         this.restTemplate = restTemplate;
     }
 
+    public Item find(String typeId) {
+        String url = String.format("%s/%s/universe/types/%s",
+                config.getEsiUrl(), config.getEsiVersion(), typeId);
+        Item result = restTemplate.getForObject(url, Item.class);
+        if (result != null) {
+            result.setCategory(Category.INVENTORY_TYPE.toString());
+        }
+        return result;
+    }
+
     public Item setGroupId(Item item, String category) {
         String url = String.format("%s/%s/universe/%s/%s",
                 config.getEsiUrl(), config.getEsiVersion(), category, item.getTypeId());
         Item object = restTemplate.getForObject(url, Item.class);
-        item.setGroupId(object.getGroupId());
+        if (object != null) {
+            item.setGroupId(object.getGroupId());
+        }
         return item;
     }
 
@@ -33,30 +45,23 @@ public class EsiAdapter {
         String url = String.format("%s/%s/universe/%s/%s",
                 config.getEsiUrl(), config.getEsiVersion(), category, item.getGroupId());
         Item object = restTemplate.getForObject(url, Item.class);
-        item.setCategoryId(object.getCategoryId());
+        if (object != null) {
+            item.setCategoryId(object.getCategoryId());
+        }
         return item;
     }
 
     public List<String> getCollection(String id, String category) {
         String url = String.format("%s/%s/universe/%s/%s",
                 config.getEsiUrl(), config.getEsiVersion(), category, id);
-
         Item object = restTemplate.getForObject(url, Item.class);
-
         List<String> result = new ArrayList<>();
-        if ("categories".equals(category)) {
-            result = object.getCategoryGroups();
-        } else if ("groups".equals(category)) {
-            result = object.getCategoryTypes();
-        }
-        return result;
-    }
-
-    public Item find(String typeId) {
-        String url = String.format("%s/%s/universe/types/%s", config.getEsiUrl(), config.getEsiVersion(), typeId);
-        Item result = restTemplate.getForObject(url, Item.class);
-        if (result != null) {
-            result.setCategory(Category.INVENTORY_TYPE.toString());
+        if (object != null) {
+            if ("categories".equals(category)) {
+                result = object.getCategoryGroups();
+            } else if ("groups".equals(category)) {
+                result = object.getCategoryTypes();
+            }
         }
         return result;
     }

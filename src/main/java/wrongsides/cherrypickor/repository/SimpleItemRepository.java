@@ -30,7 +30,7 @@ public class SimpleItemRepository implements ItemRepository {
 
     @Override
     @CacheEvict(value = "items", allEntries = true)
-    public void removeAll() {
-        //remove all items from cache
+    public boolean removeAll() {
+        return true;
     }
 }

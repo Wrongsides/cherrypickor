@@ -20,13 +20,11 @@ public class StaticDataServiceTest {
     @Mock
     private IdRepository idRepository;
     @Mock
-    private ItemRepository itemRepository;
+    private ItemService itemService;
 
     @Before
     public void setUp() {
-        staticDataService = new StaticDataService(idRepository, itemRepository);
-        when(idRepository.findItemTypeId(any())).thenReturn("1232");
-        when(idRepository.getGroupIds(any())).thenReturn(Lists.newArrayList("345"));
+        staticDataService = new StaticDataService(idRepository, itemService);
     }
 
     @Test

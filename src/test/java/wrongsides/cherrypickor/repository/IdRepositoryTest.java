@@ -28,7 +28,7 @@ public class IdRepositoryTest {
     @Test
     public void findItemTypeId_givenBrightSpodumain_delegatesToEsiAdapter() {
 
-        idRepository.findItemTypeId(new Item(Category.INVENTORY_TYPE, "Bright Spodumain"));
+        idRepository.findTypeId(new Item(Category.INVENTORY_TYPE, "Bright Spodumain"));
 
         verify(esiAdapter).find("Bright Spodumain", "inventory_type", Item.class);
     }

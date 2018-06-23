@@ -23,15 +23,15 @@ public class IdRepository {
         return esiAdapter.find(regionName, "region", Region.class).orElse(null);
     }
 
-    public String findItemTypeId(Item item) {
+    public String findTypeId(Item item) {
         return esiAdapter.find(item.getName(), item.getCategory(), item.getClass()).orElse(null);
     }
 
-    public String setGroupId(Item item) {
+    public String findGroupId(Item item) {
         return esiAdapter.setGroupId(item, "types").getGroupId();
     }
 
-    public String setCategoryId(Item item) {
+    public String findCategoryId(Item item) {
         return esiAdapter.setCategoryId(item, "groups").getCategoryId();
     }
 

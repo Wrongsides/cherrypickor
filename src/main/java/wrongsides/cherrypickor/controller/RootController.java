@@ -21,7 +21,7 @@ public class RootController {
     }
 
     @GetMapping
-    public NamedResource get(){
+    public NamedResource get() {
         NamedResource namedResource = new NamedResource();
         namedResource.setName("root");
         namedResource.add(linkTo(methodOn(RootController.class).get()).withSelfRel());
@@ -31,8 +31,7 @@ public class RootController {
 
 
     @PostMapping
-    public String post(){
-        staticDataService.refreshAsteroidStaticData();
-        return "Asteroid item static data refreshed.";
+    public String post() {
+        return staticDataService.refreshAsteroidStaticData();
     }
 }
