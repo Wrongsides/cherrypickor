@@ -30,7 +30,7 @@ public class IdRepositoryTest {
 
         idRepository.findTypeId(new Item(Category.INVENTORY_TYPE, "Bright Spodumain"));
 
-        verify(esiAdapter).find("Bright Spodumain", "inventory_type", Item.class);
+        verify(esiAdapter).find("Bright Spodumain", Category.INVENTORY_TYPE, Item.class);
     }
 
     @Test
@@ -38,6 +38,6 @@ public class IdRepositoryTest {
 
         idRepository.findRegionId("The Forge");
 
-        verify(esiAdapter).find("The Forge", "region", Region.class);
+        verify(esiAdapter).find("The Forge", Category.REGION, Region.class);
     }
 }

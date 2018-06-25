@@ -42,7 +42,7 @@ public class EsiAdapterTest {
         item.getSearchIds().add("17466");
         when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(item);
 
-        Optional<String> itemTypeId = esiAdapter.find("Bright Spodumain", "inventory_type", Item.class);
+        Optional<String> itemTypeId = esiAdapter.find("Bright Spodumain", Category.INVENTORY_TYPE, Item.class);
 
         verify(restTemplate).getForObject("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=Bright Spodumain&strict=true", Item.class);
         assertThat(itemTypeId).isEqualTo(Optional.of("17466"));
@@ -52,7 +52,7 @@ public class EsiAdapterTest {
     public void find_givenNonExistantItem_returnsEmpty() {
         when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(new Item(Category.INVENTORY_TYPE, "NonExistantItem"));
 
-        Optional<String> itemTypeId = esiAdapter.find("NonExistantItem", "inventory_type", Item.class);
+        Optional<String> itemTypeId = esiAdapter.find("NonExistantItem", Category.INVENTORY_TYPE, Item.class);
 
         verify(restTemplate).getForObject("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=NonExistantItem&strict=true", Item.class);
         assertThat(itemTypeId).isEmpty();
@@ -60,6 +60,6 @@ public class EsiAdapterTest {
 
     @Test
     public void find_givenNullRegion_returnsEmpty() {
-        assertThat(esiAdapter.find(null, "inventory_type", Item.class)).isEmpty();
+        assertThat(esiAdapter.find(null, Category.INVENTORY_TYPE, Item.class)).isEmpty();
     }
 }

@@ -3,11 +3,11 @@ package wrongsides.cherrypickor.repository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import wrongsides.cherrypickor.adapter.EsiAdapter;
+import wrongsides.cherrypickor.domain.Category;
 import wrongsides.cherrypickor.domain.Item;
 import wrongsides.cherrypickor.domain.Region;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class IdRepository {
@@ -20,26 +20,26 @@ public class IdRepository {
 
     @Cacheable(value = "regions")
     public String findRegionId(String regionName) {
-        return esiAdapter.find(regionName, "region", Region.class).orElse(null);
+        return esiAdapter.find(regionName, Category.REGION, Region.class).orElse(null);
     }
 
     public String findTypeId(Item item) {
-        return esiAdapter.find(item.getName(), item.getCategory(), item.getClass()).orElse(null);
+        return esiAdapter.find(item.getName(), Category.INVENTORY_TYPE, Item.class).orElse(null);
     }
 
     public String findGroupId(Item item) {
-        return esiAdapter.setGroupId(item, "types").getGroupId();
+        return esiAdapter.find(item.getTypeId(), Category.TYPES).orElse(new Item()).getGroupId();
     }
 
     public String findCategoryId(Item item) {
-        return esiAdapter.setCategoryId(item, "groups").getCategoryId();
+        return esiAdapter.find(item.getGroupId(), Category.GROUPS).orElse(new Item()).getCategoryId();
     }
 
     public List<String> getGroupIds(String categoryId) {
-        return esiAdapter.getCollection(categoryId, "categories");
+        return esiAdapter.getCollection(categoryId, Category.CATEGORIES);
     }
 
     public List<String> getTypeIds(String groupId) {
-        return esiAdapter.getCollection(groupId, "groups");
+        return esiAdapter.getCollection(groupId, Category.GROUPS);
     }
 }

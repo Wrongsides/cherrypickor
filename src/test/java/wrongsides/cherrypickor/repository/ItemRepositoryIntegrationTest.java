@@ -12,6 +12,8 @@ import wrongsides.cherrypickor.config.CacheConfig;
 import wrongsides.cherrypickor.domain.Category;
 import wrongsides.cherrypickor.domain.Item;
 
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -35,19 +37,19 @@ public class ItemRepositoryIntegrationTest {
         itemRepository.getByName("asteroid");
         itemRepository.getByName("asteroid");
 
-        verify(esiAdapter, times(1)).findByName("asteroid");
+        verify(esiAdapter, times(1)).getByName("asteroid");
         verifyNoMoreInteractions(esiAdapter);
     }
 
     @Test
     public void getByTypeId_putRequestInCacheWithKeyOfName() {
         Item item = new Item(Category.INVENTORY_TYPE, "asteroid");
-        when(esiAdapter.find(anyString())).thenReturn(item);
+        when(esiAdapter.find(anyString(), any(Category.class))).thenReturn(Optional.of(item));
 
         itemRepository.getByTypeId("typeId");
         itemRepository.getByName("asteroid");
 
-        verify(esiAdapter, times(1)).find("typeId");
+        verify(esiAdapter, times(1)).find("typeId", Category.TYPES);
         verifyNoMoreInteractions(esiAdapter);
     }
 
@@ -61,7 +63,7 @@ public class ItemRepositoryIntegrationTest {
         itemRepository.getByName("asteroid");
         itemRepository.getByName("another-item");
 
-        verify(esiAdapter, times(4)).findByName(anyString());
+        verify(esiAdapter, times(4)).getByName(anyString());
         verifyNoMoreInteractions(esiAdapter);
     }
 }
