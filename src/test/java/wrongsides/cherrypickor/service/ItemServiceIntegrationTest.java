@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import wrongsides.cherrypickor.adapter.EsiAdapter;
 import wrongsides.cherrypickor.config.AsyncConfig;
 import wrongsides.cherrypickor.domain.Item;
-import wrongsides.cherrypickor.repository.SimpleItemRepository;
+import wrongsides.cherrypickor.repository.ItemRepository;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -20,24 +19,20 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {
-        AsyncConfig.class,
-        ItemService.class,
-        SimpleItemRepository.class
-})
+@ContextConfiguration(classes = {AsyncConfig.class, ItemService.class})
 public class ItemServiceIntegrationTest {
 
     @Autowired
     private ItemService itemService;
 
     @MockBean
-    private EsiAdapter esiAdapter;
+    private ItemRepository itemRepository;
 
     @Test
     public void getByTypeId_callsItemRepositoryAsynchronously() {
         await().atMost(500L, TimeUnit.MILLISECONDS)
                 .until(() -> {
-                    when(esiAdapter.find(anyString())).thenAnswer(invocation -> {
+                    when(itemRepository.getByTypeId(anyString())).thenAnswer(invocation -> {
                         Thread.sleep(200L);
                         return Mockito.mock(Item.class);
                     });

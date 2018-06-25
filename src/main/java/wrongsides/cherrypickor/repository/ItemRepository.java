@@ -1,12 +1,33 @@
 package wrongsides.cherrypickor.repository;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
+import wrongsides.cherrypickor.adapter.EsiAdapter;
 import wrongsides.cherrypickor.domain.Item;
 
-public interface ItemRepository {
+@Component
+public class ItemRepository {
 
-    Item getByName(String name);
+    private EsiAdapter esiAdapter;
 
-    Item getByTypeId(String typeId);
+    public ItemRepository(EsiAdapter esiAdapter) {
+        this.esiAdapter = esiAdapter;
+    }
 
-    boolean removeAll();
+    @Cacheable(value = "items")
+    public Item getByName(String name) {
+        return esiAdapter.findByName(name);
+    }
+
+    @CachePut(value = "items", key = "#result.name", condition = "#result != null")
+    public Item getByTypeId(String typeId) {
+        return esiAdapter.find(typeId);
+    }
+
+    @CacheEvict(value = "items", allEntries = true)
+    public boolean removeAll() {
+        return true;
+    }
 }
