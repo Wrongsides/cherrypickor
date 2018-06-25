@@ -16,12 +16,12 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    public boolean removeAll() {
+    boolean removeAll() {
         return itemRepository.removeAll();
     }
 
     @Async
-    public CompletableFuture<Item> getByTypeId(String typeId) {
+    CompletableFuture<Item> getByTypeId(String typeId) {
         return CompletableFuture.completedFuture(itemRepository.getByTypeId(typeId));
     }
 }
