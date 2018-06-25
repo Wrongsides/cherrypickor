@@ -52,7 +52,9 @@ public class AsteroidsControllerTest {
         verify(asteroidsService).sortByValue(asteroidList);
         assertThat(asteroidsResource.getAsteroids()).isEqualTo(asteroidList);
         assertThat(asteroidsResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/asteroids"), Tuple.tuple("root", "/"));
+                .containsExactly(Tuple.tuple("self", "/asteroids"),
+                        Tuple.tuple("refresh","/refresh"),
+                        Tuple.tuple("root", "/"));
     }
 
     @Test
@@ -66,7 +68,9 @@ public class AsteroidsControllerTest {
         verify(asteroidsService).sortByValue(asteroidList);
         assertThat(asteroidsResource.getAsteroids()).isEqualTo(asteroidList);
         assertThat(asteroidsResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/asteroids"), Tuple.tuple("root", "/"));
+                .containsExactly(Tuple.tuple("self", "/asteroids"),
+                        Tuple.tuple("refresh","/refresh"),
+                        Tuple.tuple("root", "/"));
     }
 
     @Test
@@ -76,6 +80,8 @@ public class AsteroidsControllerTest {
         verifyZeroInteractions(asteroidsService);
         assertThat(asteroidsResource.getAsteroids()).isEmpty();
         assertThat(asteroidsResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/asteroids"), Tuple.tuple("root", "/"));
+                .containsExactly(Tuple.tuple("self", "/asteroids"),
+                        Tuple.tuple("refresh","/refresh"),
+                        Tuple.tuple("root", "/"));
     }
 }
