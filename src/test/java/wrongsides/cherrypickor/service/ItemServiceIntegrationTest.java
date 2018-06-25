@@ -1,6 +1,5 @@
 package wrongsides.cherrypickor.service;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -19,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {
@@ -34,11 +32,6 @@ public class ItemServiceIntegrationTest {
 
     @MockBean
     private EsiAdapter esiAdapter;
-
-    @Before
-    public void setUp() {
-        initMocks(this);
-    }
 
     @Test
     public void getByTypeId_callsItemRepositoryAsynchronously() {
