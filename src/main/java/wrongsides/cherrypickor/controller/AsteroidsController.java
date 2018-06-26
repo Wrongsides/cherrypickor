@@ -35,7 +35,7 @@ public class AsteroidsController {
     }
 
     @PostMapping
-    public AsteroidsResource post(@RequestBody String body) {
+    public AsteroidsResource post(@RequestBody String body) throws IOException {
         AsteroidsResource asteroidsResource = new AsteroidsResource();
         addLinks(asteroidsResource);
         if (body == null) {
@@ -45,11 +45,7 @@ public class AsteroidsController {
         Asteroids asteroids = new Asteroids();
 
         if (body.startsWith("{")) {
-            try {
-                asteroids = objectMapper.readValue(body, Asteroids.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            asteroids = objectMapper.readValue(body, Asteroids.class);
         } else {
             asteroids.setAsteroids(asteroidsService.parseScannerOutput(body));
         }

@@ -39,8 +39,8 @@ public class StaticDataService {
                 }
                 CompletableFuture.allOf(items).join();
             }
-            return "Asteroid item static data refreshed.";
+            return "Asteroid item static data refreshed";
         }
-        return "Failed to clear cache, Asteroid item static data has not been refreshed.";
+        return "Failed to clear cache, Asteroid item static data has not been refreshed";
     }
 }

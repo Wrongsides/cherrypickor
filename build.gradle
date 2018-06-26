@@ -13,6 +13,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'jacoco'
 
 group = 'wrongsides'
 version = '0.0.1-SNAPSHOT'
@@ -35,3 +36,37 @@ dependencies {
     testCompile('io.cucumber:cucumber-junit:2.4.0')
     testCompile('commons-io:commons-io:2.5')
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+            excludes = [
+                    'wrongsides.cherrypickor.CherrypickorApplication',
+                    'wrongsides.cherrypickor.config.*',
+                    'wrongsides.cherrypickor.domain.*'
+            ]
+            limit {
+                counter = 'LINE'
+                value = 'MISSEDCOUNT'
+                maximum = 0
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'MISSEDCOUNT'
+                maximum = 0
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
