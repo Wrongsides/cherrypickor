@@ -24,9 +24,9 @@ public class StaticDataService {
     public String refreshAsteroidStaticData() {
         if (itemService.removeAll()) {
             Item rootAsteroid = new Item(Category.INVENTORY_TYPE, ROOT_ASTEROID);
-            rootAsteroid.setTypeId(idRepository.findTypeId(rootAsteroid));
-            rootAsteroid.setGroupId(idRepository.findGroupId(rootAsteroid));
-            rootAsteroid.setCategoryId(idRepository.findCategoryId(rootAsteroid));
+            rootAsteroid.setTypeId(idRepository.findTypeId(rootAsteroid.getName()));
+            rootAsteroid.setGroupId(idRepository.findGroupId(rootAsteroid.getTypeId()));
+            rootAsteroid.setCategoryId(idRepository.findCategoryId(rootAsteroid.getGroupId()));
 
             List<String> typeIds = new LinkedList<>();
             idRepository.getGroupIds(rootAsteroid.getCategoryId())

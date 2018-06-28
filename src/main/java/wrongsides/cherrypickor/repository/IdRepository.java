@@ -23,16 +23,16 @@ public class IdRepository {
         return esiAdapter.find(regionName, Category.REGION, Region.class).orElse(null);
     }
 
-    public String findTypeId(Item item) {
-        return esiAdapter.find(item.getName(), Category.INVENTORY_TYPE, Item.class).orElse(null);
+    public String findTypeId(String inventoryTypeName) {
+        return esiAdapter.find(inventoryTypeName, Category.INVENTORY_TYPE, Item.class).orElse(null);
     }
 
-    public String findGroupId(Item item) {
-        return esiAdapter.find(item.getTypeId(), Category.TYPES).orElse(new Item()).getGroupId();
+    public String findGroupId(String typeId) {
+        return esiAdapter.find(typeId, Category.TYPES).orElse(new Item()).getGroupId();
     }
 
-    public String findCategoryId(Item item) {
-        return esiAdapter.find(item.getGroupId(), Category.GROUPS).orElse(new Item()).getCategoryId();
+    public String findCategoryId(String groupId) {
+        return esiAdapter.find(groupId, Category.GROUPS).orElse(new Item()).getCategoryId();
     }
 
     public List<String> getGroupIds(String categoryId) {

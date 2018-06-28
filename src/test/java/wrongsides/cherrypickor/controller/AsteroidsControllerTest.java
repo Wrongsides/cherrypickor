@@ -14,6 +14,7 @@ import wrongsides.cherrypickor.domain.collections.Asteroids;
 import wrongsides.cherrypickor.service.AsteroidsService;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,7 +55,7 @@ public class AsteroidsControllerTest {
     }
 
     @Test
-    public void post_givenAsteroids_callsMapAndSortOnAsteroids() throws IOException {
+    public void post_givenAsteroids_callsMapAndSortOnAsteroids() throws IOException, ParseException {
         String body = "{ asteroids.json }";
         when(objectMapper.readValue(anyString(), eq(Asteroids.class))).thenReturn(asteroids);
         when(asteroids.getAsteroids()).thenReturn(asteroidList);
@@ -79,7 +80,7 @@ public class AsteroidsControllerTest {
     }
 
     @Test
-    public void post_givenScannerOutput_callsParseAndSortOnAsteroids() throws IOException {
+    public void post_givenScannerOutput_callsParseAndSortOnAsteroids() throws IOException, ParseException {
         String body = "Survey scanner output string";
         when(asteroidsService.parseScannerOutput(anyString())).thenReturn(asteroidList);
 
@@ -95,7 +96,7 @@ public class AsteroidsControllerTest {
     }
 
     @Test
-    public void post_givenNull_doesNotCallServiceAndReturnsEmptyAsteroids() throws IOException {
+    public void post_givenNull_doesNotCallServiceAndReturnsEmptyAsteroids() throws IOException, ParseException {
         AsteroidsResource asteroidsResource = asteroidsController.post(null);
 
         verifyZeroInteractions(asteroidsService);

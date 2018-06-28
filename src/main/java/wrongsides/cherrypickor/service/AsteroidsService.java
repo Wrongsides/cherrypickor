@@ -1,10 +1,14 @@
 package wrongsides.cherrypickor.service;
 
 import org.springframework.stereotype.Service;
-import wrongsides.cherrypickor.domain.*;
+import wrongsides.cherrypickor.domain.Asteroid;
+import wrongsides.cherrypickor.domain.Item;
+import wrongsides.cherrypickor.domain.Measure;
+import wrongsides.cherrypickor.domain.Unit;
 import wrongsides.cherrypickor.repository.IdRepository;
 import wrongsides.cherrypickor.repository.ItemRepository;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -35,21 +39,19 @@ public class AsteroidsService {
                 Item item = itemRepository.getByName(asteroid.getName());
                 if (item != null) {
                     asteroid.setValue(valuationService.appraise(item.getTypeId(), regionId, asteroid.getQuantity()));
+                } else {
+                    asteroid.setValue(BigDecimal.ZERO);
                 }
             });
             asteroids.sort((a1, a2) -> a2.getValue().compareTo(a1.getValue()));
         }
     }
 
-    public List<Asteroid> parseScannerOutput(String body) {
+    public List<Asteroid> parseScannerOutput(String body) throws ParseException {
         List<Asteroid> asteroids = new ArrayList<>();
         String[] split = body.split("\\n");
-        try {
-            for (String s : split) {
-                asteroids.add(stingToAsteroid(s));
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+        for (String s : split) {
+            asteroids.add(stingToAsteroid(s));
         }
         return asteroids;
     }

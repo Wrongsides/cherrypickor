@@ -9,6 +9,7 @@ import wrongsides.cherrypickor.domain.collections.Asteroids;
 import wrongsides.cherrypickor.service.AsteroidsService;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -35,7 +36,7 @@ public class AsteroidsController {
     }
 
     @PostMapping
-    public AsteroidsResource post(@RequestBody String body) throws IOException {
+    public AsteroidsResource post(@RequestBody String body) throws IOException, ParseException {
         AsteroidsResource asteroidsResource = new AsteroidsResource();
         addLinks(asteroidsResource);
         if (body == null) {
