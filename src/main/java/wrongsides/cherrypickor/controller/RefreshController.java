@@ -34,7 +34,7 @@ public class RefreshController {
         NamedResource namedResource = new NamedResource();
         addLinks(namedResource);
         namedResource.setName("refresh");
-        namedResource.setMessage(staticDataService.refreshAsteroidStaticData());
+        namedResource.setMessage(staticDataService.refreshItemStaticData("Dark Ochre"));
         return namedResource;
     }
 

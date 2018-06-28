@@ -11,6 +11,7 @@ import wrongsides.cherrypickor.controller.resource.NamedResource;
 import wrongsides.cherrypickor.service.StaticDataService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,11 +42,11 @@ public class RefreshControllerTest {
 
     @Test
     public void post_returnsNamedResource() {
-        when(staticDataService.refreshAsteroidStaticData()).thenReturn("message");
+        when(staticDataService.refreshItemStaticData(anyString())).thenReturn("message");
 
         NamedResource namedResource = refreshController.post();
 
-        verify(staticDataService).refreshAsteroidStaticData();
+        verify(staticDataService).refreshItemStaticData("Dark Ochre");
         assertThat(namedResource.getName()).isEqualTo("refresh");
         assertThat(namedResource.getMessage()).isEqualTo("message");
         assertThat(namedResource.getLinks()).extracting("rel", "href")

@@ -42,6 +42,10 @@ public class Item extends Search {
         return searchIds;
     }
 
+    public void setSearchIds(List<String> searchIds) {
+        this.searchIds = searchIds;
+    }
+
     public String getCategory() {
         return category;
     }
