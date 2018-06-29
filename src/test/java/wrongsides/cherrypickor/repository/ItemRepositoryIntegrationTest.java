@@ -14,6 +14,7 @@ import wrongsides.cherrypickor.domain.Item;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -34,23 +35,32 @@ public class ItemRepositoryIntegrationTest {
 
     @Test
     public void getByName_cachesRequestWithKeyOfName() {
-        itemRepository.getByName("asteroid");
-        itemRepository.getByName("asteroid");
+        Item item = new Item(Category.INVENTORY_TYPE, "asteroid");
+        item.setTypeId("type-id");
+        when(esiAdapter.getByName(anyString())).thenReturn(item);
+
+        Item asteroid = itemRepository.getByName("asteroid");
+        Item cachedAsteroid = itemRepository.getByName("asteroid");
 
         verify(esiAdapter, times(1)).getByName("asteroid");
         verifyNoMoreInteractions(esiAdapter);
+        assertThat(asteroid).isEqualToComparingFieldByField(item);
+        assertThat(cachedAsteroid).isEqualToComparingFieldByField(item);
     }
 
     @Test
     public void getByTypeId_putRequestInCacheWithKeyOfName() {
         Item item = new Item(Category.INVENTORY_TYPE, "asteroid");
+        item.setTypeId("type-id");
         when(esiAdapter.find(anyString(), any(Category.class))).thenReturn(Optional.of(item));
 
-        itemRepository.getByTypeId("typeId");
-        itemRepository.getByName("asteroid");
+        Item asteroid = itemRepository.getByTypeId("typeId");
+        Item cachedAsteroid = itemRepository.getByName("asteroid");
 
         verify(esiAdapter, times(1)).find("typeId", Category.TYPES);
         verifyNoMoreInteractions(esiAdapter);
+        assertThat(asteroid).isEqualToComparingFieldByField(item);
+        assertThat(cachedAsteroid).isEqualToComparingFieldByField(item);
     }
 
     @Test
