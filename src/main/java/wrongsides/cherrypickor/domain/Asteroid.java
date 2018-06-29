@@ -10,9 +10,9 @@ public class Asteroid {
     private Measure distance;
     private BigDecimal value;
 
-    public Asteroid() { }
+    private Asteroid() { }
 
-    public Asteroid(String name, int quantity, Measure volume, Measure distance, BigDecimal value) {
+    private Asteroid(String name, int quantity, Measure volume, Measure distance, BigDecimal value) {
         this.name = name;
         this.quantity = quantity;
         this.volume = volume;
@@ -24,32 +24,8 @@ public class Asteroid {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public Measure getVolume() {
-        return volume;
-    }
-
-    public void setVolume(Measure volume) {
-        this.volume = volume;
-    }
-
-    public Measure getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Measure distance) {
-        this.distance = distance;
     }
 
     public BigDecimal getValue() {
@@ -58,5 +34,45 @@ public class Asteroid {
 
     public void setValue(BigDecimal value) {
         this.value = value;
+    }
+
+    public static AsteroidBuilder of(String name) {
+        return new AsteroidBuilder(name);
+    }
+
+    public static class AsteroidBuilder {
+        private String name;
+        private int quantity;
+        private Measure volume;
+        private Measure distance;
+        private BigDecimal value;
+
+        private AsteroidBuilder(String name) {
+            this.name = name;
+        }
+
+        public AsteroidBuilder withQuantity(int quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public AsteroidBuilder withVolume(Measure volume) {
+            this.volume = volume;
+            return this;
+        }
+
+        public AsteroidBuilder withDistance(Measure distance) {
+            this.distance = distance;
+            return this;
+        }
+
+        public AsteroidBuilder withValue(BigDecimal value) {
+            this.value = value;
+            return this;
+        }
+
+        public Asteroid build() {
+            return new Asteroid(name, quantity, volume, distance, value);
+        }
     }
 }

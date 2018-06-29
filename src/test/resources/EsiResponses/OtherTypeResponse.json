@@ -1,0 +1,16 @@
+{
+  "capacity": 0,
+  "description": "Other asteroid description",
+  "dogma_attributes": [],
+  "group_id": 454,
+  "icon_id": 1275,
+  "market_group_id": 522,
+  "mass": 1e+35,
+  "name": "Other Type",
+  "packaged_volume": 8,
+  "portion_size": 100,
+  "published": true,
+  "radius": 1,
+  "type_id": 17436,
+  "volume": 8
+}

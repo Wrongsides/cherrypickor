@@ -4,5 +4,5 @@ import java.util.List;
 
 public abstract class Search {
 
-    public abstract List<String> getIds();
+    public abstract List<String> getSearchIds();
 }

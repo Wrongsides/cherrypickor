@@ -1,16 +1,15 @@
 package wrongsides.cherrypickor.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.hateoas.ResourceSupport;
+import org.springframework.web.bind.annotation.*;
 import wrongsides.cherrypickor.controller.resource.AsteroidsResource;
+import wrongsides.cherrypickor.controller.resource.NamedResource;
 import wrongsides.cherrypickor.domain.collections.Asteroids;
 import wrongsides.cherrypickor.service.AsteroidsService;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -22,30 +21,32 @@ public class AsteroidsController {
     private AsteroidsService asteroidsService;
     private ObjectMapper objectMapper;
 
-    @Autowired
     public AsteroidsController(AsteroidsService asteroidsService, ObjectMapper objectMapper) {
         this.asteroidsService = asteroidsService;
         this.objectMapper = objectMapper;
     }
 
-    @PostMapping
-    public AsteroidsResource post(@RequestBody String body) {
-        AsteroidsResource asteroidsResource = new AsteroidsResource();
-        asteroidsResource.add(linkTo(methodOn(AsteroidsController.class).post(null)).withSelfRel());
-        asteroidsResource.add(linkTo(methodOn(RootController.class).get()).withRel("root"));
+    @GetMapping
+    public NamedResource get() {
+        NamedResource namedResource = new NamedResource();
+        addLinks(namedResource);
+        namedResource.setName("asteroids");
+        namedResource.setMessage("POST scanner output or JSON asteroids for appraisal");
+        return namedResource;
+    }
 
-        if(body == null) {
+    @PostMapping
+    public AsteroidsResource post(@RequestBody String body) throws IOException, ParseException {
+        AsteroidsResource asteroidsResource = new AsteroidsResource();
+        addLinks(asteroidsResource);
+        if (body == null) {
             return asteroidsResource;
         }
 
         Asteroids asteroids = new Asteroids();
 
-        if (body.startsWith("{")){
-            try {
-                asteroids = objectMapper.readValue(body, Asteroids.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (body.startsWith("{")) {
+            asteroids = objectMapper.readValue(body, Asteroids.class);
         } else {
             asteroids.setAsteroids(asteroidsService.parseScannerOutput(body));
         }
@@ -54,5 +55,11 @@ public class AsteroidsController {
 
         asteroidsResource.setAsteroids(asteroids.getAsteroids());
         return asteroidsResource;
+    }
+
+    private void addLinks(ResourceSupport resource) {
+        resource.add(linkTo(methodOn(AsteroidsController.class).get()).withSelfRel());
+        resource.add(linkTo(methodOn(RefreshController.class).get()).withRel("refresh"));
+        resource.add(linkTo(methodOn(RootController.class).get()).withRel("root"));
     }
 }

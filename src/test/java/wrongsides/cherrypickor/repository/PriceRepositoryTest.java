@@ -52,4 +52,25 @@ public class PriceRepositoryTest {
 
         assertThat(maxBuyOrder.get()).isEqualTo(new BigDecimal("3050.67"));
     }
+
+    @Test
+    public void getMaxBuyOrderFor_givenNoMarketOrders_returnsEmpty() {
+        List<MarketOrder> marketOrders = new ArrayList<>();
+        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(new ParameterizedTypeReference<List<MarketOrder>>() {}))).thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(marketOrders);
+
+        Optional<BigDecimal> maxBuyOrder = priceRepository.getMaxBuyOrderFor("no", "orders");
+
+        assertThat(maxBuyOrder).isEmpty();
+    }
+
+    @Test
+    public void getMaxBuyOrderFor_givenNullMarketOrders_returnsEmpty() {
+        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(new ParameterizedTypeReference<List<MarketOrder>>() {}))).thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(null);
+
+        Optional<BigDecimal> maxBuyOrder = priceRepository.getMaxBuyOrderFor("no", "orders");
+
+        assertThat(maxBuyOrder).isEmpty();
+    }
 }

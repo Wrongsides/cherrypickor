@@ -11,12 +11,12 @@ import java.util.List;
 public class Region extends Search {
 
     @JsonAlias("region")
-    private List<String> ids;
+    private List<String> searchIds;
 
-    public List<String> getIds() {
-        if (ids == null) {
-            ids = new ArrayList<>();
+    public List<String> getSearchIds() {
+        if (searchIds == null) {
+            searchIds = new ArrayList<>();
         }
-        return ids;
+        return searchIds;
     }
 }

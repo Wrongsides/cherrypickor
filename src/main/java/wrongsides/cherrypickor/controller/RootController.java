@@ -13,11 +13,13 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class RootController {
 
     @GetMapping
-    public NamedResource get(){
+    public NamedResource get() {
         NamedResource namedResource = new NamedResource();
-        namedResource.setName("root");
         namedResource.add(linkTo(methodOn(RootController.class).get()).withSelfRel());
-        namedResource.add(linkTo(methodOn(AsteroidsController.class).post(null)).withRel("asteroids"));
+        namedResource.add(linkTo(methodOn(AsteroidsController.class).get()).withRel("asteroids"));
+        namedResource.add(linkTo(methodOn(RefreshController.class).get()).withRel("refresh"));
+        namedResource.setName("root");
+        namedResource.setMessage("Welcome to Cherrypickor!");
         return namedResource;
     }
 }
