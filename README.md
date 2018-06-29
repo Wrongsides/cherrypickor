@@ -4,7 +4,7 @@ API root: localhost:9000
 
 To run locally against latest ESI: 
 ``` 
-./gradlew build &amp;&amp; java -jar -Dspring.profiles.active=production build/libs/cherrypickor-0.0.1-SNAPSHOT.jar
+./gradlew build && java -jar -Dspring.profiles.active=production build/libs/cherrypickor-0.0.1-SNAPSHOT.jar
 ```
 
 To deploy with docker:
@@ -13,3 +13,5 @@ To deploy with docker:
 docker build -t wrongsides/cherrypickor .
 docker run -d -p 9000:9000 --name cherrypickor wrongsides/cherrypickor
 ```
+
+![cherrypickor](cherrypickor.jpg?raw=true)
