@@ -7,10 +7,8 @@ To run locally against latest ESI:
 ./gradlew build && java -jar -Dspring.profiles.active=production build/libs/cherrypickor-0.0.1-SNAPSHOT.jar
 ```
 
-To deploy with docker:
+To deploy from docker hub:
 ```
-./gradlew build
-docker build -t wrongsides/cherrypickor .
 docker run -d -p 9000:9000 --name cherrypickor wrongsides/cherrypickor
 ```
 

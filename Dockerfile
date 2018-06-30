@@ -1,11 +1,10 @@
-FROM java:8
-VOLUME /tmp
-RUN apt-get install -y --no-install-recommends git-core \
- && git clone https://github.com/Wrongsides/cherrypickor.git
+FROM anapsix/alpine-java:8_jdk
 
-WORKDIR /cherrypickor
+RUN apk add --no-cache git \
+&& git clone https://github.com/Wrongsides/cherrypickor.git \
+&& cd cherrypickor && ./gradlew build \
+&& cp build/libs/cherrypickor-0.0.1-SNAPSHOT.jar /cherrypickor.jar \
+&& cd .. && rm -rf cherrypickor && rm -rf ~/.gradle && apk del git
 
-RUN ./gradlew build
-
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","-Dspring.profiles.active=production","build/libs/cherrypickor-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","-Dspring.profiles.active=production","/cherrypickor.jar"]
 EXPOSE 9000
