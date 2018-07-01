@@ -72,14 +72,16 @@ public class StepDefinitions implements En {
             HttpEntity<String> request = new HttpEntity<>("");
 
             Link refreshUri = traverson.follow("refresh").asLink();
-                refreshResponse = restTemplate.postForEntity(refreshUri.getHref(), request, NamedResource.class);
+            refreshResponse = restTemplate.postForEntity(refreshUri.getHref(), request, NamedResource.class);
             assertThat(refreshResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         });
 
         Then("^the asteroid types are requested from ESI$", () -> {
-            verify(3, getRequestedFor(urlEqualTo("/latest/universe/types/1232")));
-            verify(2, getRequestedFor(urlEqualTo("/latest/universe/types/17436")));
+            verify(1, getRequestedFor(urlEqualTo("/latest/search/?datasource=tranquility&categories=inventory_type&search=Dark%20Ochre&strict=true")));
+            verify(1, getRequestedFor(urlEqualTo("/latest/universe/types/17436")));
+            verify(1, getRequestedFor(urlEqualTo("/latest/universe/types/22")));
+            verify(1, getRequestedFor(urlEqualTo("/latest/universe/types/17425")));
         });
     }
 
@@ -107,28 +109,27 @@ public class StepDefinitions implements En {
     }
 
     private void stubForTypes() throws IOException {
-        String type1232 = FileUtils.readFileToString(new File("src/test/resources/EsiResponses/DarkOchreTypeResponse.json"), StandardCharsets.UTF_8);
-        stubFor(get("/latest/universe/types/1232")
-                .willReturn(okJson(type1232)));
+        String darkOchreTypeResponse = FileUtils.readFileToString(new File("src/test/resources/EsiResponses/DarkOchreTypeResponse.json"), StandardCharsets.UTF_8);
+        String onyxOchreTypeResponse = FileUtils.readFileToString(new File("src/test/resources/EsiResponses/OnyxOchreTypeResponse.json"), StandardCharsets.UTF_8);
+        String arkonorTypeResponse = FileUtils.readFileToString(new File("src/test/resources/EsiResponses/ArkonorTypeResponse.json"), StandardCharsets.UTF_8);
+        String crimsonArkonorTypeResponse = FileUtils.readFileToString(new File("src/test/resources/EsiResponses/CrimsonArkonorTypeResponse.json"), StandardCharsets.UTF_8);
 
-        String type17436 = FileUtils.readFileToString(new File("src/test/resources/EsiResponses/OtherTypeResponse.json"), StandardCharsets.UTF_8);
-        stubFor(get("/latest/universe/types/17436")
-                .willReturn(okJson(type17436)));
+        stubFor(get("/latest/universe/types/1232").willReturn(okJson(darkOchreTypeResponse)));
+        stubFor(get("/latest/universe/types/17436").willReturn(okJson(onyxOchreTypeResponse)));
+        stubFor(get("/latest/universe/types/22").willReturn(okJson(arkonorTypeResponse)));
+        stubFor(get("/latest/universe/types/17425").willReturn(okJson(crimsonArkonorTypeResponse)));
     }
 
     private void stubForGroups() throws IOException {
         String group453 = FileUtils.readFileToString(new File("src/test/resources/EsiResponses/DarkOchreGroupResponse.json"), StandardCharsets.UTF_8);
-        stubFor(get("/latest/universe/groups/453")
-                .willReturn(okJson(group453)));
+        stubFor(get("/latest/universe/groups/453").willReturn(okJson(group453)));
 
-        String group454 = FileUtils.readFileToString(new File("src/test/resources/EsiResponses/OtherGroupResponse.json"), StandardCharsets.UTF_8);
-        stubFor(get("/latest/universe/groups/454")
-                .willReturn(okJson(group454)));
+        String group454 = FileUtils.readFileToString(new File("src/test/resources/EsiResponses/ArkonorGroupResponse.json"), StandardCharsets.UTF_8);
+        stubFor(get("/latest/universe/groups/454").willReturn(okJson(group454)));
     }
 
     private void stubForCategory() throws IOException {
         String body = FileUtils.readFileToString(new File("src/test/resources/EsiResponses/AsteroidCategoryResponse.json"), StandardCharsets.UTF_8);
-        stubFor(get("/latest/universe/categories/25")
-                .willReturn(okJson(body)));
+        stubFor(get("/latest/universe/categories/25").willReturn(okJson(body)));
     }
 }

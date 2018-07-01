@@ -35,13 +35,14 @@ public class StaticDataServiceTest {
     @Test
     public void loadStaticData_givenItemsToRefresh_returnsSuccessMessage() {
         when(itemService.removeAll()).thenReturn(true);
-        when(idRepository.findTypeId(anyString())).thenReturn("type-id");
+        when(idRepository.findTypeId(anyString())).thenReturn("type-id-one");
         when(idRepository.findGroupId(anyString())).thenReturn("group-id");
         when(idRepository.findCategoryId(anyString())).thenReturn("category-id");
         List<String> groupIds = Arrays.asList("group-id-one", "group-id-two");
         when(idRepository.getGroupIds(anyString())).thenReturn(groupIds);
-        List<String> typeIds = Arrays.asList("type-id-one", "type-id-two");
-        when(idRepository.getTypeIds(anyString())).thenReturn(typeIds);
+        List<String> typeIdsOne = Arrays.asList("type-id-one", "type-id-two");
+        List<String> typeIdsTwo = Arrays.asList("type-id-three", "type-id-four");
+        when(idRepository.getTypeIds(anyString())).thenReturn(typeIdsOne).thenReturn(typeIdsTwo);
         when(itemService.getByTypeId(anyString())).thenReturn(CompletableFuture.completedFuture(new Item()));
 
         String message = staticDataService.refreshItemStaticData("Dark Ochre");
@@ -49,15 +50,15 @@ public class StaticDataServiceTest {
         InOrder inOrder = inOrder(itemService, idRepository);
         inOrder.verify(itemService).removeAll();
         inOrder.verify(idRepository).findTypeId("Dark Ochre");
-        inOrder.verify(idRepository).findGroupId("type-id");
+        inOrder.verify(idRepository).findGroupId("type-id-one");
         inOrder.verify(idRepository).findCategoryId("group-id");
         inOrder.verify(idRepository).getGroupIds("category-id");
         inOrder.verify(idRepository).getTypeIds("group-id-one");
         inOrder.verify(idRepository).getTypeIds("group-id-two");
         inOrder.verify(itemService).getByTypeId("type-id-one");
         inOrder.verify(itemService).getByTypeId("type-id-two");
-        inOrder.verify(itemService).getByTypeId("type-id-one");
-        inOrder.verify(itemService).getByTypeId("type-id-two");
+        inOrder.verify(itemService).getByTypeId("type-id-three");
+        inOrder.verify(itemService).getByTypeId("type-id-four");
         assertThat(message).isEqualTo("Asteroid item static data refreshed");
     }
 

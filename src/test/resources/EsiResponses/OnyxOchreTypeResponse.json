@@ -1,0 +1,69 @@
+{
+  "capacity": 0,
+  "description": "Shiny black nuggets of onyx ochre look very nice and are occasionally used in ornaments. But the great amount of nocxium is what miners are really after. Like in all else, good looks are only an added bonus. \r\n\r\nConsidered a worthless ore for years, dark ochre was ignored by most miners until improved reprocessing techniques managed to extract the huge amount of isogen inside it. Dark ochre also contains useful amounts of tritanium and nocxium.\r\n\r\nAvailable primarily in <color='0xFFFF0000'>0.0</color> security status solar systems or lower.",
+  "dogma_attributes": [
+    {
+      "attribute_id": 161,
+      "value": 8
+    },
+    {
+      "attribute_id": 162,
+      "value": 0
+    },
+    {
+      "attribute_id": 2115,
+      "value": 0
+    },
+    {
+      "attribute_id": 4,
+      "value": 1e+35
+    },
+    {
+      "attribute_id": 182,
+      "value": 3386
+    },
+    {
+      "attribute_id": 38,
+      "value": 0
+    },
+    {
+      "attribute_id": 2699,
+      "value": 2
+    },
+    {
+      "attribute_id": 1940,
+      "value": 28396
+    },
+    {
+      "attribute_id": 1941,
+      "value": 100
+    },
+    {
+      "attribute_id": 790,
+      "value": 12183
+    },
+    {
+      "attribute_id": 2711,
+      "value": 1232
+    },
+    {
+      "attribute_id": 1980,
+      "value": 0.85
+    },
+    {
+      "attribute_id": 1981,
+      "value": 600
+    }
+  ],
+  "group_id": 453,
+  "icon_id": 1275,
+  "market_group_id": 522,
+  "mass": 1e+35,
+  "name": "Onyx Ochre",
+  "packaged_volume": 8,
+  "portion_size": 100,
+  "published": true,
+  "radius": 1,
+  "type_id": 17436,
+  "volume": 8
+}

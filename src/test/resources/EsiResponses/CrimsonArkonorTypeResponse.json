@@ -1,0 +1,69 @@
+{
+  "capacity": 0,
+  "description": "While fairly invisible to all but the most experienced miners, there are significant molecular differences between arkonor and its crimson counterpart, so-named because of the blood-red veins running through it.\r\n\r\nOne of the rarest and most sought-after ores in the known universe. A sizable nugget of this can sweep anyone from rags to riches in no time. Arkonor has the largest amount of megacyte of any ore, and also contains some mexallon and tritanium.\r\n\r\nAvailable primarily in <color='0xFFFF0000'>0.0</color> security status solar systems or lower.",
+  "dogma_attributes": [
+    {
+      "attribute_id": 161,
+      "value": 16
+    },
+    {
+      "attribute_id": 162,
+      "value": 1
+    },
+    {
+      "attribute_id": 2115,
+      "value": 0
+    },
+    {
+      "attribute_id": 4,
+      "value": 1e+35
+    },
+    {
+      "attribute_id": 182,
+      "value": 3386
+    },
+    {
+      "attribute_id": 38,
+      "value": 0
+    },
+    {
+      "attribute_id": 2699,
+      "value": 2
+    },
+    {
+      "attribute_id": 1940,
+      "value": 28385
+    },
+    {
+      "attribute_id": 1941,
+      "value": 100
+    },
+    {
+      "attribute_id": 790,
+      "value": 12180
+    },
+    {
+      "attribute_id": 2711,
+      "value": 22
+    },
+    {
+      "attribute_id": 1980,
+      "value": 0.85
+    },
+    {
+      "attribute_id": 1981,
+      "value": 600
+    }
+  ],
+  "group_id": 450,
+  "icon_id": 1277,
+  "market_group_id": 512,
+  "mass": 1e+35,
+  "name": "Crimson Arkonor",
+  "packaged_volume": 16,
+  "portion_size": 100,
+  "published": true,
+  "radius": 1,
+  "type_id": 17425,
+  "volume": 16
+}
