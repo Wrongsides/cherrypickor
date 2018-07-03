@@ -15,7 +15,7 @@ public abstract class Config {
         return "tranquility";
     }
 
-    public String getApplicationRoot() {
-        return "http://localhost:9000";
+    public String getApiRoot() {
+        return "http://localhost:9000/api";
     }
 }

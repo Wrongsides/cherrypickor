@@ -36,7 +36,7 @@ public class StepDefinitions implements En {
 
     public StepDefinitions() throws URISyntaxException {
 
-        this.traverson = new Traverson(new URI(new LocalConfig().getApplicationRoot()), MediaTypes.HAL_JSON);
+        this.traverson = new Traverson(new URI(new LocalConfig().getApiRoot()), MediaTypes.HAL_JSON);
         this.restTemplate = new RestTemplate();
 
         Given("^Cherrypickor is running$", () -> {

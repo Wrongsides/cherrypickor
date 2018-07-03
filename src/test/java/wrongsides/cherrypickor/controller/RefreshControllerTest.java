@@ -35,9 +35,9 @@ public class RefreshControllerTest {
         assertThat(namedResource.getName()).isEqualTo("refresh");
         assertThat(namedResource.getMessage()).isEqualTo("POST to refresh Asteroid static data");
         assertThat(namedResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/refresh"),
-                        Tuple.tuple("asteroids", "/asteroids"),
-                        Tuple.tuple("root", "/"));
+                .containsExactly(Tuple.tuple("self", "/api/refresh"),
+                        Tuple.tuple("asteroids", "/api/asteroids"),
+                        Tuple.tuple("root", "/api"));
     }
 
     @Test
@@ -50,8 +50,8 @@ public class RefreshControllerTest {
         assertThat(namedResource.getName()).isEqualTo("refresh");
         assertThat(namedResource.getMessage()).isEqualTo("message");
         assertThat(namedResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/refresh"),
-                        Tuple.tuple("asteroids", "/asteroids"),
-                        Tuple.tuple("root", "/"));
+                .containsExactly(Tuple.tuple("self", "/api/refresh"),
+                        Tuple.tuple("asteroids", "/api/asteroids"),
+                        Tuple.tuple("root", "/api"));
     }
 }
