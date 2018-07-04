@@ -1,0 +1,13 @@
+plugins {
+    id "com.moowork.node" version "1.2.0"
+}
+
+node {
+    version = '8.11.3'
+    npmVersion = '4.0.0'
+    download = true
+}
+
+task bundle(type:Exec, dependsOn:npmInstall) {
+    commandLine 'npm', 'run', 'build'
+}

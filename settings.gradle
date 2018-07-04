@@ -1,1 +1,3 @@
+include 'cherrypickor-server'
+include 'cherrypickor-client'
 rootProject.name = 'cherrypickor'

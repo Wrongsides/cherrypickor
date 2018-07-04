@@ -15,7 +15,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(path = "/asteroids")
+@RequestMapping(path = "/api/asteroids")
 public class AsteroidsController {
 
     private AsteroidsService asteroidsService;
