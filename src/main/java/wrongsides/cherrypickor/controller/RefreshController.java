@@ -11,7 +11,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(path = "/refresh")
+@RequestMapping(path = "/api/refresh")
 public class RefreshController {
 
     private StaticDataService staticDataService;

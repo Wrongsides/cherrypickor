@@ -49,9 +49,9 @@ public class AsteroidsControllerTest {
         assertThat(namedResource.getName()).isEqualTo("asteroids");
         assertThat(namedResource.getMessage()).isEqualTo("POST scanner output or JSON asteroids for appraisal");
         assertThat(namedResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/asteroids"),
-                        Tuple.tuple("refresh", "/refresh"),
-                        Tuple.tuple("root", "/"));
+                .containsExactly(Tuple.tuple("self", "/api/asteroids"),
+                        Tuple.tuple("refresh", "/api/refresh"),
+                        Tuple.tuple("root", "/api"));
     }
 
     @Test
@@ -66,9 +66,9 @@ public class AsteroidsControllerTest {
         verify(asteroidsService).sortByValue(asteroidList);
         assertThat(asteroidsResource.getAsteroids()).isEqualTo(asteroidList);
         assertThat(asteroidsResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/asteroids"),
-                        Tuple.tuple("refresh", "/refresh"),
-                        Tuple.tuple("root", "/"));
+                .containsExactly(Tuple.tuple("self", "/api/asteroids"),
+                        Tuple.tuple("refresh", "/api/refresh"),
+                        Tuple.tuple("root", "/api"));
     }
 
     @Test
@@ -90,9 +90,9 @@ public class AsteroidsControllerTest {
         verify(asteroidsService).sortByValue(asteroidList);
         assertThat(asteroidsResource.getAsteroids()).isEqualTo(asteroidList);
         assertThat(asteroidsResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/asteroids"),
-                        Tuple.tuple("refresh", "/refresh"),
-                        Tuple.tuple("root", "/"));
+                .containsExactly(Tuple.tuple("self", "/api/asteroids"),
+                        Tuple.tuple("refresh", "/api/refresh"),
+                        Tuple.tuple("root", "/api"));
     }
 
     @Test
@@ -102,8 +102,8 @@ public class AsteroidsControllerTest {
         verifyZeroInteractions(asteroidsService);
         assertThat(asteroidsResource.getAsteroids()).isEmpty();
         assertThat(asteroidsResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/asteroids"),
-                        Tuple.tuple("refresh", "/refresh"),
-                        Tuple.tuple("root", "/"));
+                .containsExactly(Tuple.tuple("self", "/api/asteroids"),
+                        Tuple.tuple("refresh", "/api/refresh"),
+                        Tuple.tuple("root", "/api"));
     }
 }

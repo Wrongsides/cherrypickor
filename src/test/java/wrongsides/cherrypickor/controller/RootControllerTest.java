@@ -22,8 +22,8 @@ public class RootControllerTest {
         assertThat(namedResource.getName()).isEqualTo("root");
         assertThat(namedResource.getMessage()).isEqualTo("Welcome to Cherrypickor!");
         assertThat(namedResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/"),
-                        Tuple.tuple("asteroids", "/asteroids"),
-                        Tuple.tuple("refresh", "/refresh"));
+                .containsExactly(Tuple.tuple("self", "/api"),
+                        Tuple.tuple("asteroids", "/api/asteroids"),
+                        Tuple.tuple("refresh", "/api/refresh"));
     }
 }
