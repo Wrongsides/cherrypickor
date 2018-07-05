@@ -1,3 +1,5 @@
+![build status](https://dockerbuildbadges.quelltext.eu/status.svg?organization=wrongsides&repository=cherrypickor)
+
 Backend app for cherry picking the best asteroids to mine in a given belt or anomaly based on current market values.
 
 API root: localhost:9000/api

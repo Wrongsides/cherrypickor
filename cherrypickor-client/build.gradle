@@ -11,11 +11,11 @@ node {
 
 task test(type: Exec, dependsOn: npmInstall) {
     group = "build"
-    commandLine 'npm', 'test'
+    commandLine ".gradle/npm/npm-v${node.npmVersion}/bin/npm", "test"
 }
 
 task bundle(type: Exec, dependsOn: test) {
-    commandLine 'npm', 'run', 'build'
+    commandLine ".gradle/npm/npm-v${node.npmVersion}/bin/npm", "run", "build"
 }
 
 task clean {
