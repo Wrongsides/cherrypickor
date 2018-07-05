@@ -1,0 +1,25 @@
+plugins {
+    id "com.moowork.node" version "1.2.0"
+}
+
+node {
+    version = '10.6.0'
+    npmVersion = '6.1.0'
+    download = true
+    nodeModulesDir = file("${projectDir}")
+}
+
+task test(type: Exec, dependsOn: npmInstall) {
+    group = "build"
+    commandLine 'npm', 'test'
+}
+
+task bundle(type: Exec, dependsOn: test) {
+    commandLine 'npm', 'run', 'build'
+}
+
+task clean {
+    group = "build"
+    delete "build"
+    delete "node_modules"
+}

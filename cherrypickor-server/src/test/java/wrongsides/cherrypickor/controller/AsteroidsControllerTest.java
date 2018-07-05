@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.hateoas.ResourceSupport;
 import wrongsides.cherrypickor.controller.resource.AsteroidsResource;
 import wrongsides.cherrypickor.controller.resource.NamedResource;
 import wrongsides.cherrypickor.domain.Asteroid;
@@ -48,10 +49,7 @@ public class AsteroidsControllerTest {
 
         assertThat(namedResource.getName()).isEqualTo("asteroids");
         assertThat(namedResource.getMessage()).isEqualTo("POST scanner output or JSON asteroids for appraisal");
-        assertThat(namedResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/asteroids"),
-                        Tuple.tuple("refresh", "/refresh"),
-                        Tuple.tuple("root", "/"));
+        verifyLinks(namedResource);
     }
 
     @Test
@@ -65,10 +63,7 @@ public class AsteroidsControllerTest {
         verify(objectMapper).readValue(body, Asteroids.class);
         verify(asteroidsService).sortByValue(asteroidList);
         assertThat(asteroidsResource.getAsteroids()).isEqualTo(asteroidList);
-        assertThat(asteroidsResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/asteroids"),
-                        Tuple.tuple("refresh", "/refresh"),
-                        Tuple.tuple("root", "/"));
+        verifyLinks(asteroidsResource);
     }
 
     @Test
@@ -89,10 +84,7 @@ public class AsteroidsControllerTest {
         verify(asteroidsService).parseScannerOutput(body);
         verify(asteroidsService).sortByValue(asteroidList);
         assertThat(asteroidsResource.getAsteroids()).isEqualTo(asteroidList);
-        assertThat(asteroidsResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/asteroids"),
-                        Tuple.tuple("refresh", "/refresh"),
-                        Tuple.tuple("root", "/"));
+        verifyLinks(asteroidsResource);
     }
 
     @Test
@@ -101,9 +93,13 @@ public class AsteroidsControllerTest {
 
         verifyZeroInteractions(asteroidsService);
         assertThat(asteroidsResource.getAsteroids()).isEmpty();
-        assertThat(asteroidsResource.getLinks()).extracting("rel", "href")
-                .containsExactly(Tuple.tuple("self", "/asteroids"),
-                        Tuple.tuple("refresh", "/refresh"),
-                        Tuple.tuple("root", "/"));
+        verifyLinks(asteroidsResource);
+    }
+
+    private void verifyLinks(ResourceSupport resource) {
+        assertThat(resource.getLinks()).extracting("rel", "href")
+                .containsExactly(Tuple.tuple("self", "/api/asteroids"),
+                        Tuple.tuple("refresh", "/api/refresh"),
+                        Tuple.tuple("root", "/api"));
     }
 }

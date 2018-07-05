@@ -1,0 +1,73 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.0.RELEASE'
+    }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'jacoco'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-cache')
+    compile('org.springframework.boot:spring-boot-starter-hateoas')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.awaitility:awaitility:3.1.0')
+    testCompile('com.github.tomakehurst:wiremock:2.17.0')
+    testCompile('io.cucumber:cucumber-java8:2.4.0')
+    testCompile('io.cucumber:cucumber-junit:2.4.0')
+    testCompile('commons-io:commons-io:2.5')
+}
+
+processResources {
+    from("../cherrypickor-client/build") {
+        into 'public'
+    }
+}
+processResources.dependsOn ':cherrypickor-client:bundle'
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+            excludes = [
+                    'wrongsides.cherrypickor.CherrypickorApplication',
+                    'wrongsides.cherrypickor.config.*',
+                    'wrongsides.cherrypickor.domain.*'
+            ]
+            limit {
+                counter = 'LINE'
+                value = 'MISSEDCOUNT'
+                maximum = 0
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'MISSEDCOUNT'
+                maximum = 0
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
