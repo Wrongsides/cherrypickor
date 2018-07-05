@@ -38,10 +38,6 @@ processResources {
 }
 processResources.dependsOn ':cherrypickor-client:bundle'
 
-clean {
-    delete "../cherrypickor-client/build"
-}
-
 jacocoTestReport {
     reports {
         xml.enabled false
