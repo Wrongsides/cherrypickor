@@ -122,13 +122,32 @@ public class AsteroidsServiceTest {
 
         List<Asteroid> asteroids = asteroidsService.parseScannerOutput(scannerOutput);
 
+        assertThat(asteroids.size()).isEqualTo(2);
         assertThat(asteroids.get(0)).isEqualToComparingFieldByFieldRecursively(expectedSpod);
         assertThat(asteroids.get(1)).isEqualToComparingFieldByFieldRecursively(expectedCrok);
     }
 
     @Test
+    public void parseScannerOutput_givenScannerOutputWithTitle_returnsAsteroids() throws ParseException {
+        String scannerOutput = "Bright Spodumain\t2,829\t45,264 m3\t217 km\nSharp Crokite\nSharp Crokite\t10,015\t160,240 m3\t234 km";
+        Asteroid expectedSpod = Asteroid.of("Bright Spodumain").withQuantity(2829).withVolume(new Measure(45264, Unit.CUBIC_METRES)).withDistance(new Measure(217, Unit.KILOMETRES)).build();
+        Asteroid expectedCrok = Asteroid.of("Sharp Crokite").withQuantity(10015).withVolume(new Measure(160240, Unit.CUBIC_METRES)).withDistance(new Measure(234, Unit.KILOMETRES)).build();
+
+        List<Asteroid> asteroids = asteroidsService.parseScannerOutput(scannerOutput);
+
+        assertThat(asteroids.size()).isEqualTo(2);
+        assertThat(asteroids.get(0)).isEqualToComparingFieldByFieldRecursively(expectedSpod);
+        assertThat(asteroids.get(1)).isEqualToComparingFieldByFieldRecursively(expectedCrok);
+    }
+
+    @Test
+    public void parseScannerOutput_givenUnparseableString_returnsEmptyList() {
+        assertThat(asteroidsService.parseScannerOutput("Bright Spodumain\tboom!\tboom! m3\tboom! km")).isEmpty();
+    }
+
+    @Test
     public void parseScannerOutput_givenNull_throwsException() {
-        assertThatExceptionOfType(ParseException.class)
-                .isThrownBy(() -> asteroidsService.parseScannerOutput("Boom!\tBoom!"));
+        assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(() -> asteroidsService.parseScannerOutput(null));
     }
 }

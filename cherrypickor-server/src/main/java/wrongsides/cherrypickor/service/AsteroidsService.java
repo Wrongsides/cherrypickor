@@ -11,9 +11,8 @@ import wrongsides.cherrypickor.repository.ItemRepository;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AsteroidsService {
@@ -47,22 +46,29 @@ public class AsteroidsService {
         }
     }
 
-    public List<Asteroid> parseScannerOutput(String body) throws ParseException {
-        List<Asteroid> asteroids = new ArrayList<>();
+    public List<Asteroid> parseScannerOutput(String body) {
         String[] split = body.split("\\n");
-        for (String s : split) {
-            asteroids.add(stingToAsteroid(s));
-        }
-        return asteroids;
+        return Arrays.stream(split)
+                .map(this::stingToAsteroid)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
-    private Asteroid stingToAsteroid(String s) throws ParseException {
+    private Asteroid stingToAsteroid(String s) {
+        Asteroid asteroid = null;
         String[] split = s.split("\\t");
-        return Asteroid.of(split[0])
-                .withQuantity(NumberFormat.getNumberInstance(Locale.UK).parse(split[1]).intValue())
-                .withVolume(toMeasure(split[2]))
-                .withDistance(toMeasure(split[3]))
-                .build();
+        if (split.length == 4) {
+            try {
+                asteroid = Asteroid.of(split[0])
+                        .withQuantity(NumberFormat.getNumberInstance(Locale.UK).parse(split[1]).intValue())
+                        .withVolume(toMeasure(split[2]))
+                        .withDistance(toMeasure(split[3]))
+                        .build();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return asteroid;
     }
 
     private Measure toMeasure(String measure) throws ParseException {
