@@ -6,7 +6,7 @@ API root: localhost:9000/api
 
 To run locally against latest ESI: 
 ``` 
-./gradlew build && java -jar -Dspring.profiles.active=production build/libs/cherrypickor-server.jar
+./gradlew build && java -jar -Dspring.profiles.active=production cherrypickor-server/build/libs/cherrypickor-server.jar
 ```
 
 To deploy from docker hub:
