@@ -1,10 +1,10 @@
 Backend app for cherry picking the best asteroids to mine in a given belt or anomaly based on current market values.
 
-API root: localhost:9000
+API root: localhost:9000/api
 
 To run locally against latest ESI: 
 ``` 
-./gradlew build && java -jar -Dspring.profiles.active=production build/libs/cherrypickor-0.0.1-SNAPSHOT.jar
+./gradlew build && java -jar -Dspring.profiles.active=production build/libs/cherrypickor-server.jar
 ```
 
 To deploy from docker hub:
