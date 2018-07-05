@@ -14,4 +14,4 @@ To deploy from docker hub:
 docker run -d -p 9000:9000 --name cherrypickor wrongsides/cherrypickor
 ```
 
-![cherrypickor](cherrypickor.jpg?raw=true)
+![cherrypickor](cherrypickor-server/cherrypickor.jpg?raw=true)
