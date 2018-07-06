@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import {Grid, Row, Col, FormGroup, FormControl, Button} from "react-bootstrap";
+import React, {Component} from 'react';
 
 class AsteroidForm extends Component {
     constructor(props) {
@@ -20,13 +21,26 @@ class AsteroidForm extends Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <div>
-                    <label>Survey scanner output:</label>
-                </div>
-                <textarea value={this.state.value} onChange={this.handleChange} />
-                <input type="submit" value="Submit" />
-            </form>
+            <Grid>
+                <Row className="show-grid">
+                    <Col xs={8} md={6}>
+                        <form onSubmit={this.handleSubmit}>
+                            <FormGroup controlId="formControlsTextarea">
+                                <FormControl componentClass="textarea"
+                                             placeholder="Copy & paste survey scanner output here…"
+                                             rows="8"
+                                             value={this.state.value}
+                                             onChange={this.handleChange}
+                                             onSubmit={this.handleSubmit}/>
+                            </FormGroup>
+                            <div class="pull-right"><Button bsStyle="primary" type="submit">Submit »</Button></div>
+                        </form>
+                    </Col>
+                    <Col xs={6} md={4}>
+                        Results should go here
+                    </Col>
+                </Row>
+            </Grid>
         );
     }
 }
