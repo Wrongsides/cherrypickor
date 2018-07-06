@@ -1,10 +1,14 @@
-import {Grid, Row, Col, FormGroup, FormControl, Button} from "react-bootstrap";
+import {Grid, Row, Col, FormGroup, FormControl, Button, Table} from "react-bootstrap";
 import React, {Component} from 'react';
 
 class AsteroidForm extends Component {
     constructor(props) {
         super(props);
-        this.state = {value: ''};
+        this.state = {
+            isLoading: false,
+            value: '',
+            asteroids: [],
+        };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -15,11 +19,26 @@ class AsteroidForm extends Component {
     }
 
     handleSubmit(event) {
-        alert('Scanner output was submitted: ' + this.state.value);
+        this.setState({isLoading: true})
+        fetch('/api/asteroids', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: this.state.value
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({
+                    asteroids: responseJson.asteroids,
+                    isLoading: false
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+            });
         event.preventDefault();
     }
 
     render() {
+        const {isLoading, asteroids} = this.state;
         return (
             <Grid>
                 <Row className="show-grid">
@@ -33,11 +52,34 @@ class AsteroidForm extends Component {
                                              onChange={this.handleChange}
                                              onSubmit={this.handleSubmit}/>
                             </FormGroup>
-                            <div class="pull-right"><Button bsStyle="primary" type="submit">Submit »</Button></div>
+                            <div className="pull-right">
+                                <Button type="submit"
+                                        bsStyle="primary"
+                                        disabled={isLoading}>
+                                    Submit »
+                                </Button>
+                            </div>
                         </form>
                     </Col>
-                    <Col xs={6} md={4}>
-                        Results should go here
+                    <Col xs={8} md={6}>
+                        <Table>
+                            <thead>
+                            <tr>
+                                <th>Asteroid</th>
+                                <th>Quantity</th>
+                                <th>Jita Buy Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {asteroids.map(asteroid =>
+                                <tr>
+                                    <td>{asteroid.name}</td>
+                                    <td>{asteroid.quantity}</td>
+                                    <td>{asteroid.value} ISK</td>
+                                </tr>
+                            )}
+                            </tbody>
+                        </Table>
                     </Col>
                 </Row>
             </Grid>
