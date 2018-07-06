@@ -26,10 +26,10 @@ class AsteroidForm extends Component {
             body: this.state.value
         }).then((response) => response.json())
             .then((responseJson) => {
-                this.setState({
-                    asteroids: responseJson.asteroids,
-                    isLoading: false
-                });
+                if (responseJson.asteroids !== undefined) {
+                    this.setState({asteroids: responseJson.asteroids})
+                }
+                this.setState({isLoading: false});
             })
             .catch((error) => {
                 console.error(error);
