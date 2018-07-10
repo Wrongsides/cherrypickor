@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.math.BigDecimal;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MarketOrder {
+public class Order {
 
     @JsonAlias("system_id")
     private String systemId;
@@ -14,9 +14,9 @@ public class MarketOrder {
     @JsonAlias("price")
     private BigDecimal price;
 
-    public MarketOrder() { }
+    public Order() { }
 
-    public MarketOrder(String systemId, BigDecimal price) {
+    public Order(String systemId, BigDecimal price) {
         this.systemId = systemId;
         this.price = price;
     }

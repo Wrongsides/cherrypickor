@@ -2,16 +2,15 @@ package wrongsides.cherrypickor.domain;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import wrongsides.cherrypickor.adapter.Search;
+import wrongsides.cherrypickor.adapter.Category;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Item extends Search {
+public class Item {
 
-    @JsonAlias("inventory_type")
-    private List<String> searchIds;
+    private String category;
+    private String name;
     @JsonAlias("type_id")
     private String typeId;
     @JsonAlias("group_id")
@@ -23,27 +22,12 @@ public class Item extends Search {
     @JsonAlias("types")
     private List<String> categoryTypes;
 
-    private String category;
-    private String name;
-
     public Item() {
     }
 
     public Item(Category category, String name) {
         this.category = category.toString();
         this.name = name;
-    }
-
-    @Override
-    public List<String> getSearchIds() {
-        if (searchIds == null) {
-            searchIds = new ArrayList<>();
-        }
-        return searchIds;
-    }
-
-    public void setSearchIds(List<String> searchIds) {
-        this.searchIds = searchIds;
     }
 
     public String getCategory() {
@@ -100,14 +84,5 @@ public class Item extends Search {
 
     public void setCategoryTypes(List<String> categoryTypes) {
         this.categoryTypes = categoryTypes;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "typeId='" + typeId + '\'' +
-                ", category='" + category + '\'' +
-                ", name='" + name + '\'' +
-                '}';
     }
 }

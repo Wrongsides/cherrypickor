@@ -10,7 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import wrongsides.cherrypickor.config.environment.Config;
-import wrongsides.cherrypickor.domain.MarketOrder;
+import wrongsides.cherrypickor.domain.Order;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class PriceRepositoryTest {
     @Mock
     private RestTemplate restTemplate;
     @Mock
-    private ResponseEntity<List<MarketOrder>> responseEntity;
+    private ResponseEntity<List<Order>> responseEntity;
 
     private PriceRepository priceRepository;
 
@@ -42,11 +42,11 @@ public class PriceRepositoryTest {
 
     @Test
     public void getMaxBuyOrderFor_returnsTheHighestMarketOrderPrice() {
-        List<MarketOrder> marketOrders = new ArrayList<>();
-        marketOrders.add(new MarketOrder("1", new BigDecimal("3050.67")));
-        marketOrders.add(new MarketOrder("1", new BigDecimal("3050.60")));
-        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(new ParameterizedTypeReference<List<MarketOrder>>() {}))).thenReturn(responseEntity);
-        when(responseEntity.getBody()).thenReturn(marketOrders);
+        List<Order> orders = new ArrayList<>();
+        orders.add(new Order("1", new BigDecimal("3050.67")));
+        orders.add(new Order("1", new BigDecimal("3050.60")));
+        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(new ParameterizedTypeReference<List<Order>>() {}))).thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(orders);
 
         Optional<BigDecimal> maxBuyOrder = priceRepository.getMaxBuyOrderFor("17466", "10000002");
 
@@ -55,9 +55,9 @@ public class PriceRepositoryTest {
 
     @Test
     public void getMaxBuyOrderFor_givenNoMarketOrders_returnsEmpty() {
-        List<MarketOrder> marketOrders = new ArrayList<>();
-        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(new ParameterizedTypeReference<List<MarketOrder>>() {}))).thenReturn(responseEntity);
-        when(responseEntity.getBody()).thenReturn(marketOrders);
+        List<Order> orders = new ArrayList<>();
+        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(new ParameterizedTypeReference<List<Order>>() {}))).thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(orders);
 
         Optional<BigDecimal> maxBuyOrder = priceRepository.getMaxBuyOrderFor("no", "orders");
 
@@ -66,7 +66,7 @@ public class PriceRepositoryTest {
 
     @Test
     public void getMaxBuyOrderFor_givenNullMarketOrders_returnsEmpty() {
-        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(new ParameterizedTypeReference<List<MarketOrder>>() {}))).thenReturn(responseEntity);
+        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(new ParameterizedTypeReference<List<Order>>() {}))).thenReturn(responseEntity);
         when(responseEntity.getBody()).thenReturn(null);
 
         Optional<BigDecimal> maxBuyOrder = priceRepository.getMaxBuyOrderFor("no", "orders");

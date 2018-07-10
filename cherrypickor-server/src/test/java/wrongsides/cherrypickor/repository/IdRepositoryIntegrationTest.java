@@ -8,8 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import wrongsides.cherrypickor.adapter.EsiAdapter;
 import wrongsides.cherrypickor.config.CacheConfig;
-import wrongsides.cherrypickor.domain.Category;
-import wrongsides.cherrypickor.domain.Region;
+import wrongsides.cherrypickor.adapter.Category;
 
 import java.util.Optional;
 
@@ -28,12 +27,12 @@ public class IdRepositoryIntegrationTest {
 
     @Test
     public void findRegionId_cachesRequestWithKeyOfRegionName() {
-        when(esiAdapter.find(anyString(), any(Category.class), eq(Region.class))).thenReturn(Optional.of("region-id"));
+        when(esiAdapter.find(anyString(), any(Category.class))).thenReturn(Optional.of("region-id"));
 
         String regionId = idRepository.findRegionId("region-name");
         String cachedRegionId = idRepository.findRegionId("region-name");
 
-        verify(esiAdapter, times(1)).find("region-name", Category.REGION, Region.class);
+        verify(esiAdapter, times(1)).find("region-name", Category.REGION);
         verifyNoMoreInteractions(esiAdapter);
         assertThat(regionId).isEqualTo("region-id");
         assertThat(cachedRegionId).isEqualTo("region-id");

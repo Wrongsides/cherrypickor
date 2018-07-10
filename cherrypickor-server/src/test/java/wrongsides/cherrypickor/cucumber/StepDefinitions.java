@@ -10,9 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import wrongsides.cherrypickor.config.environment.LocalConfig;
-import wrongsides.cherrypickor.controller.resource.NamedResource;
 import wrongsides.cherrypickor.domain.Asteroid;
-import wrongsides.cherrypickor.domain.collections.Asteroids;
+import wrongsides.cherrypickor.controller.resource.AsteroidsResource;
+import wrongsides.cherrypickor.controller.resource.NamedResource;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,12 +31,12 @@ public class StepDefinitions implements En {
 
     private Traverson traverson;
     private RestTemplate restTemplate;
-    private ResponseEntity<Asteroids> asteroidsResponse;
+    private ResponseEntity<AsteroidsResource> asteroidsResponse;
     private ResponseEntity<NamedResource> refreshResponse;
 
     public StepDefinitions() throws URISyntaxException {
 
-        this.traverson = new Traverson(new URI(new LocalConfig().getApplicationRoot()), MediaTypes.HAL_JSON);
+        this.traverson = new Traverson(new URI(new LocalConfig().getApiRoot()), MediaTypes.HAL_JSON);
         this.restTemplate = new RestTemplate();
 
         Given("^Cherrypickor is running$", () -> {
@@ -56,7 +56,7 @@ public class StepDefinitions implements En {
             HttpEntity<String> request = new HttpEntity<>(body);
 
             Link asteroidsUri = traverson.follow("asteroids").asLink();
-            asteroidsResponse = restTemplate.postForEntity(asteroidsUri.getHref(), request, Asteroids.class);
+            asteroidsResponse = restTemplate.postForEntity(asteroidsUri.getHref(), request, AsteroidsResource.class);
             assertThat(asteroidsResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         });
 

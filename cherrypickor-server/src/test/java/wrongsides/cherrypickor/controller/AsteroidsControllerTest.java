@@ -11,7 +11,6 @@ import org.springframework.hateoas.ResourceSupport;
 import wrongsides.cherrypickor.controller.resource.AsteroidsResource;
 import wrongsides.cherrypickor.controller.resource.NamedResource;
 import wrongsides.cherrypickor.domain.Asteroid;
-import wrongsides.cherrypickor.domain.collections.Asteroids;
 import wrongsides.cherrypickor.service.AsteroidsService;
 
 import java.io.IOException;
@@ -34,9 +33,7 @@ public class AsteroidsControllerTest {
     @Mock
     private ObjectMapper objectMapper;
     @Mock
-    private List<Asteroid> asteroidList;
-    @Mock
-    private Asteroids asteroids;
+    private List<Asteroid> asteroids;
 
     @Before
     public void setUp() throws Exception {
@@ -55,21 +52,22 @@ public class AsteroidsControllerTest {
     @Test
     public void post_givenAsteroids_callsMapAndSortOnAsteroids() throws IOException, ParseException {
         String body = "{ asteroids.json }";
-        when(objectMapper.readValue(anyString(), eq(Asteroids.class))).thenReturn(asteroids);
-        when(asteroids.getAsteroids()).thenReturn(asteroidList);
+        AsteroidsResource asteroidsResource = new AsteroidsResource();
+        asteroidsResource.setAsteroids(asteroids);
+        when(objectMapper.readValue(anyString(), eq(AsteroidsResource.class))).thenReturn(asteroidsResource);
 
-        AsteroidsResource asteroidsResource = asteroidsController.post(body);
+        AsteroidsResource response = asteroidsController.post(body);
 
-        verify(objectMapper).readValue(body, Asteroids.class);
-        verify(asteroidsService).sortByValue(asteroidList);
-        assertThat(asteroidsResource.getAsteroids()).isEqualTo(asteroidList);
-        verifyLinks(asteroidsResource);
+        verify(objectMapper).readValue(body, AsteroidsResource.class);
+        verify(asteroidsService).sortByValue(asteroids);
+        assertThat(response.getAsteroids()).isEqualTo(asteroids);
+        verifyLinks(response);
     }
 
     @Test
     public void post_givenAsteroids_throwsMappingException() throws IOException {
         String body = "{ asteroids.json }";
-        when(objectMapper.readValue(anyString(), eq(Asteroids.class))).thenThrow(new IOException());
+        when(objectMapper.readValue(anyString(), eq(AsteroidsResource.class))).thenThrow(new IOException());
 
         assertThatIOException().isThrownBy(() -> asteroidsController.post(body));
     }
@@ -77,23 +75,23 @@ public class AsteroidsControllerTest {
     @Test
     public void post_givenScannerOutput_callsParseAndSortOnAsteroids() throws IOException, ParseException {
         String body = "Survey scanner output string";
-        when(asteroidsService.parseScannerOutput(anyString())).thenReturn(asteroidList);
+        when(asteroidsService.parseScannerOutput(anyString())).thenReturn(asteroids);
 
-        AsteroidsResource asteroidsResource = asteroidsController.post(body);
+        AsteroidsResource reposnse = asteroidsController.post(body);
 
         verify(asteroidsService).parseScannerOutput(body);
-        verify(asteroidsService).sortByValue(asteroidList);
-        assertThat(asteroidsResource.getAsteroids()).isEqualTo(asteroidList);
-        verifyLinks(asteroidsResource);
+        verify(asteroidsService).sortByValue(asteroids);
+        assertThat(reposnse.getAsteroids()).isEqualTo(asteroids);
+        verifyLinks(reposnse);
     }
 
     @Test
     public void post_givenNull_doesNotCallServiceAndReturnsEmptyAsteroids() throws IOException, ParseException {
-        AsteroidsResource asteroidsResource = asteroidsController.post(null);
+        AsteroidsResource response = asteroidsController.post(null);
 
         verifyZeroInteractions(asteroidsService);
-        assertThat(asteroidsResource.getAsteroids()).isEmpty();
-        verifyLinks(asteroidsResource);
+        assertThat(response.getAsteroids()).isEmpty();
+        verifyLinks(response);
     }
 
     private void verifyLinks(ResourceSupport resource) {
