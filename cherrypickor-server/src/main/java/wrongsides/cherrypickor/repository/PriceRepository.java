@@ -11,6 +11,7 @@ import wrongsides.cherrypickor.config.environment.Config;
 import wrongsides.cherrypickor.domain.Order;
 
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -31,11 +32,13 @@ public class PriceRepository {
         ResponseEntity<List<Order>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Order>>() {
         });
         List<Order> orders = responseEntity.getBody();
-        if (orders != null && !orders.isEmpty()) {
+        if (orders == null) {
+            return Collections.emptyList();
+        } else {
             orders.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
             orders.forEach(order -> order.setCreated(ZonedDateTime.now()));
+            return orders;
         }
-        return orders;
     }
 
     @CacheEvict(value = "orders")

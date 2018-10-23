@@ -27,22 +27,20 @@ public class ValuationService {
 
     private Optional<BigDecimal> getMaxBuyOrderFor(String typeId, String regionId) {
         List<Order> orders = priceRepository.getOrders(typeId, regionId);
-        orders = refreshOrders(typeId, regionId, orders);
-        if (orders != null && !orders.isEmpty()) {
-            return Optional.of(orders.get(0).getPrice());
-        } else {
+        if (orders.isEmpty()) {
             return Optional.empty();
+        } else {
+            return Optional.of(refreshOrders(typeId, regionId, orders).get(0).getPrice());
         }
     }
 
     private List<Order> refreshOrders(String typeId, String regionId, List<Order> orders) {
-        if (orders != null && !orders.isEmpty()) {
-            Order maxBuyOrder = orders.get(0);
-            if (maxBuyOrder.getCreated().toInstant().isBefore(Instant.now().minus(1, ChronoUnit.DAYS))) {
-                priceRepository.removeOrders(typeId, regionId);
-                orders = priceRepository.getOrders(typeId, regionId);
-            }
+        Order maxBuyOrder = orders.get(0);
+        if (maxBuyOrder.getCreated().toInstant().isBefore(Instant.now().minus(1, ChronoUnit.DAYS))) {
+            priceRepository.removeOrders(typeId, regionId);
+            return priceRepository.getOrders(typeId, regionId);
+        } else {
+            return orders;
         }
-        return orders;
     }
 }

@@ -3,12 +3,17 @@ package wrongsides.cherrypickor.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import wrongsides.cherrypickor.domain.Order;
 import wrongsides.cherrypickor.repository.PriceRepository;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -29,22 +34,35 @@ public class ValuationServiceTest {
     }
 
     @Test
-    public void appraise_givenAsteroidPrice10AndQuantity2_returns20() {
-        when(priceRepository.getMaxBuyOrderFor(anyString(), anyString())).thenReturn(Optional.of(BigDecimal.TEN));
+    public void appraise_givenAsteroidOrderPrice10AndQuantity2_returns20() {
+        Order order = new Order("system-id", BigDecimal.TEN);
+        order.setCreated(ZonedDateTime.now());
+        when(priceRepository.getOrders(anyString(), anyString())).thenReturn(Collections.singletonList(order));
 
         BigDecimal value = valuationService.appraise("asteroidId", "regionId", 2);
 
-        verify(priceRepository).getMaxBuyOrderFor("asteroidId", "regionId");
+        verify(priceRepository).getOrders("asteroidId", "regionId");
         assertThat(value).isEqualTo(BigDecimal.valueOf(20L));
     }
 
     @Test
-    public void appraise_givenAsteroidWithNoPriceAndQuantity2_returns0() {
-        when(priceRepository.getMaxBuyOrderFor(anyString(), anyString())).thenReturn(Optional.empty());
+    public void appraise_givenAsteroidOrderCreatedMoreThanADayAgo_removesFromCacheAndGetsAgain() {
+        Order order = new Order("system-id", BigDecimal.TEN);
+        order.setCreated(ZonedDateTime.now().minus(1, ChronoUnit.DAYS));
+        when(priceRepository.getOrders(anyString(), anyString())).thenReturn(Collections.singletonList(order));
 
         BigDecimal value = valuationService.appraise("asteroidId", "regionId", 2);
 
-        verify(priceRepository).getMaxBuyOrderFor("asteroidId", "regionId");
+        InOrder inOrder = Mockito.inOrder(priceRepository);
+        inOrder.verify(priceRepository).getOrders("asteroidId", "regionId");
+        inOrder.verify(priceRepository).removeOrders("asteroidId", "regionId");
+        inOrder.verify(priceRepository).getOrders("asteroidId", "regionId");
+        assertThat(value).isEqualTo(BigDecimal.valueOf(20L));
+    }
+
+    @Test
+    public void appraise_givenAsteroidWithNoOrdersAndQuantity2_returns0() {
+        BigDecimal value = valuationService.appraise("asteroidId", "regionId", 2);
         assertThat(value).isEqualTo(BigDecimal.ZERO);
     }
 }
