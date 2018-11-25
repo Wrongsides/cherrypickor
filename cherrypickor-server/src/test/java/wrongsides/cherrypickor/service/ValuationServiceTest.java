@@ -48,7 +48,7 @@ public class ValuationServiceTest {
     @Test
     public void appraise_givenAsteroidOrderCreatedMoreThanADayAgo_removesFromCacheAndGetsAgain() {
         Order order = new Order("system-id", BigDecimal.TEN);
-        order.setCreated(ZonedDateTime.now().minus(1, ChronoUnit.DAYS));
+        order.setCreated(ZonedDateTime.now().minus(2, ChronoUnit.DAYS));
         when(priceRepository.getOrders(anyString(), anyString())).thenReturn(Collections.singletonList(order));
 
         BigDecimal value = valuationService.appraise("asteroidId", "regionId", 2);
