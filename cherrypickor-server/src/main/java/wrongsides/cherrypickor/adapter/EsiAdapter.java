@@ -2,11 +2,14 @@ package wrongsides.cherrypickor.adapter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import wrongsides.cherrypickor.config.environment.Config;
 import wrongsides.cherrypickor.domain.Item;
+import wrongsides.cherrypickor.domain.Order;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,5 +64,13 @@ public class EsiAdapter {
             }
         }
         return result;
+    }
+
+    public List<Order> getOrders(String typeId, String regionId) {
+        String url = String.format("%s/%s/markets/%s/orders/?datasource=%s&order_type=buy&type_id=%s",
+                config.getEsiUrl(), config.getEsiVersion(), regionId, config.getEsiDatasource(), typeId);
+        ResponseEntity<List<Order>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Order>>() {
+        });
+        return responseEntity.getBody();
     }
 }
