@@ -32,7 +32,12 @@ public class PriceRepository {
     }
 
     @CacheEvict(value = "orders")
-    public void removeOrders(String typeId, String regionId) {
-        //remove orders from cache
+    public boolean removeOrders(String typeId, String regionId) {
+        return true;
+    }
+
+    @CacheEvict(value = "orders", allEntries = true)
+    public boolean removeAll() {
+        return true;
     }
 }

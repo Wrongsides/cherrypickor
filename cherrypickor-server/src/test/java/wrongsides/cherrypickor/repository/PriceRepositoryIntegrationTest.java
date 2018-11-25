@@ -1,6 +1,7 @@
 package wrongsides.cherrypickor.repository;
 
 import com.google.common.collect.Lists;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,11 @@ public class PriceRepositoryIntegrationTest {
     @MockBean
     private EsiAdapter esiAdapter;
 
+    @Before
+    public void setUp() {
+        priceRepository.removeAll();
+    }
+
     @Test
     public void getOrders_cachesRequestWithKeyOfTypeIdRegionId() {
         Order order = new Order("systemId", BigDecimal.TEN);
@@ -42,13 +48,27 @@ public class PriceRepositoryIntegrationTest {
     }
 
     @Test
-    public void removeOrders_emptysItemCache() {
+    public void removeOrders_evictsOrdersFromCache() {
 
         priceRepository.getOrders("typeId", "regionId");
         priceRepository.removeOrders("typeId", "regionId");
         priceRepository.getOrders("typeId", "regionId");
 
         verify(esiAdapter, times(2)).getOrders("typeId", "regionId");
+        verifyNoMoreInteractions(esiAdapter);
+    }
+
+    @Test
+    public void removeAll_evictsAllOrdersFromCache() {
+
+        priceRepository.getOrders("typeId", "regionId");
+        priceRepository.getOrders("anotherTypeId", "anotherRegionId");
+        priceRepository.removeAll();
+        priceRepository.getOrders("typeId", "regionId");
+        priceRepository.getOrders("anotherTypeId", "anotherRegionId");
+
+        verify(esiAdapter, times(2)).getOrders("typeId", "regionId");
+        verify(esiAdapter, times(2)).getOrders("anotherTypeId", "anotherRegionId");
         verifyNoMoreInteractions(esiAdapter);
     }
 }
