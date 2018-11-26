@@ -1,38 +1,43 @@
 package wrongsides.cherrypickor.repository;
 
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
-import wrongsides.cherrypickor.config.environment.Config;
-import wrongsides.cherrypickor.domain.MarketOrder;
+import wrongsides.cherrypickor.adapter.EsiAdapter;
+import wrongsides.cherrypickor.domain.Order;
 
-import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class PriceRepository {
 
-    private Config config;
-    private RestTemplate restTemplate;
+    private EsiAdapter esiAdapter;
 
-    public PriceRepository(Config config, RestTemplate restTemplate) {
-        this.config = config;
-        this.restTemplate = restTemplate;
+    public PriceRepository(EsiAdapter esiAdapter) {
+        this.esiAdapter = esiAdapter;
     }
 
-    public Optional<BigDecimal> getMaxBuyOrderFor(String typeId, String regionId) {
-        String url = String.format("%s/%s/markets/%s/orders/?datasource=%s&order_type=buy&type_id=%s",
-                config.getEsiUrl(), config.getEsiVersion(), regionId, config.getEsiDatasource(), typeId);
-        ResponseEntity<List<MarketOrder>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<MarketOrder>>() {});
-        List<MarketOrder> marketOrders = responseEntity.getBody();
-        if (marketOrders != null && !marketOrders.isEmpty()) {
-            marketOrders.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
-            return Optional.of(marketOrders.get(0).getPrice());
+    @Cacheable(value = "orders")
+    public List<Order> getOrders(String typeId, String regionId) {
+        List<Order> orders = esiAdapter.getOrders(typeId, regionId);
+        if (orders == null) {
+            return Collections.emptyList();
         } else {
-            return Optional.empty();
+            orders.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
+            orders.forEach(order -> order.setCreated(ZonedDateTime.now()));
+            return orders;
         }
+    }
+
+    @CacheEvict(value = "orders")
+    public boolean removeOrders(String typeId, String regionId) {
+        return true;
+    }
+
+    @CacheEvict(value = "orders", allEntries = true)
+    public boolean removeAll() {
+        return true;
     }
 }

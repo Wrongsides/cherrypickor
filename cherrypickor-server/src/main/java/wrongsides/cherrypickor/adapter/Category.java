@@ -1,4 +1,4 @@
-package wrongsides.cherrypickor.domain;
+package wrongsides.cherrypickor.adapter;
 
 public enum Category {
 

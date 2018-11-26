@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import wrongsides.cherrypickor.adapter.EsiAdapter;
-import wrongsides.cherrypickor.domain.Category;
+import wrongsides.cherrypickor.adapter.Category;
 import wrongsides.cherrypickor.domain.Item;
 
 @Component
@@ -19,12 +19,14 @@ public class ItemRepository {
 
     @Cacheable(value = "items")
     public Item getByName(String name) {
-        return esiAdapter.getByName(name);
+        Item item = new Item(Category.INVENTORY_TYPE, name);
+        esiAdapter.find(name, Category.INVENTORY_TYPE).ifPresent(item::setTypeId);
+        return item;
     }
 
     @CachePut(value = "items", key = "#result.name", condition = "#result != null")
     public Item getByTypeId(String typeId) {
-        return esiAdapter.find(typeId, Category.TYPES).orElse(new Item());
+        return esiAdapter.findItem(typeId, Category.TYPES).orElse(new Item());
     }
 
     @CacheEvict(value = "items", allEntries = true)

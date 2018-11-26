@@ -3,9 +3,8 @@ package wrongsides.cherrypickor.repository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import wrongsides.cherrypickor.adapter.EsiAdapter;
-import wrongsides.cherrypickor.domain.Category;
+import wrongsides.cherrypickor.adapter.Category;
 import wrongsides.cherrypickor.domain.Item;
-import wrongsides.cherrypickor.domain.Region;
 
 import java.util.List;
 
@@ -20,19 +19,19 @@ public class IdRepository {
 
     @Cacheable(value = "regions")
     public String findRegionId(String regionName) {
-        return esiAdapter.find(regionName, Category.REGION, Region.class).orElse(null);
+        return esiAdapter.find(regionName, Category.REGION).orElse(null);
     }
 
     public String findTypeId(String inventoryTypeName) {
-        return esiAdapter.find(inventoryTypeName, Category.INVENTORY_TYPE, Item.class).orElse(null);
+        return esiAdapter.find(inventoryTypeName, Category.INVENTORY_TYPE).orElse(null);
     }
 
     public String findGroupId(String typeId) {
-        return esiAdapter.find(typeId, Category.TYPES).orElse(new Item()).getGroupId();
+        return esiAdapter.findItem(typeId, Category.TYPES).orElse(new Item()).getGroupId();
     }
 
     public String findCategoryId(String groupId) {
-        return esiAdapter.find(groupId, Category.GROUPS).orElse(new Item()).getCategoryId();
+        return esiAdapter.findItem(groupId, Category.GROUPS).orElse(new Item()).getCategoryId();
     }
 
     public List<String> getGroupIds(String categoryId) {

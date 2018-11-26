@@ -1,13 +1,14 @@
 package wrongsides.cherrypickor.adapter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import wrongsides.cherrypickor.config.environment.Config;
-import wrongsides.cherrypickor.domain.Category;
 import wrongsides.cherrypickor.domain.Item;
 
 import java.util.Arrays;
@@ -27,12 +28,16 @@ public class EsiAdapterTest {
     private Config config;
     @Mock
     private RestTemplate restTemplate;
+    @Mock
+    private ResponseEntity<String> responseEntity;
 
+    private ObjectMapper objectMapper;
     private EsiAdapter esiAdapter;
 
     @Before
     public void setUp() {
-        esiAdapter = new EsiAdapter(config, restTemplate);
+        objectMapper = new ObjectMapper();
+        esiAdapter = new EsiAdapter(config, restTemplate, objectMapper);
         when(config.getEsiUrl()).thenReturn("esiUrl");
         when(config.getEsiVersion()).thenReturn("esiVersion");
         when(config.getEsiDatasource()).thenReturn("esiDatasource");
@@ -40,66 +45,72 @@ public class EsiAdapterTest {
 
     @Test
     public void find_givenBrightSpodumain_returnsOptionalOf17466() {
-        Item item = new Item(Category.INVENTORY_TYPE, "Bright Spodumain");
-        item.getSearchIds().add("17466");
-        when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(item);
+        String jsonString = "{\"inventory_type\":[\"17466\"]}";
+        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(jsonString);
 
-        Optional<String> itemTypeId = esiAdapter.find("Bright Spodumain", Category.INVENTORY_TYPE, Item.class);
+        Optional<String> itemTypeId = esiAdapter.find("Bright Spodumain", Category.INVENTORY_TYPE);
 
-        verify(restTemplate).getForObject("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=Bright Spodumain&strict=true", Item.class);
+        verify(restTemplate).getForEntity("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=Bright Spodumain&strict=true", String.class);
         assertThat(itemTypeId).isEqualTo(Optional.of("17466"));
     }
 
     @Test
+    public void find_givenNonArrayItem_returnsEmpty() {
+        String jsonString = "{\"inventory_type\":\"hello\"}";
+        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(jsonString);
+
+        Optional<String> itemTypeId = esiAdapter.find("NonArrayItem", Category.INVENTORY_TYPE);
+
+        verify(restTemplate).getForEntity("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=NonArrayItem&strict=true", String.class);
+        assertThat(itemTypeId).isEqualTo(Optional.empty());
+    }
+
+    @Test
     public void find_givenNonExistantItem_returnsEmpty() {
-        when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(new Item(Category.INVENTORY_TYPE, "NonExistantItem"));
+        String jsonString = "{\"inventory_type\":[]}";
+        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(jsonString);
 
-        Optional<String> itemTypeId = esiAdapter.find("NonExistantItem", Category.INVENTORY_TYPE, Item.class);
+        Optional<String> itemTypeId = esiAdapter.find("NonExistantItem", Category.INVENTORY_TYPE);
 
-        verify(restTemplate).getForObject("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=NonExistantItem&strict=true", Item.class);
+        verify(restTemplate).getForEntity("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=NonExistantItem&strict=true", String.class);
+        assertThat(itemTypeId).isEmpty();
+    }
+
+    @Test
+    public void find_givenIOException_returnsEmpty() {
+        String jsonString = null;
+        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(jsonString);
+
+        Optional<String> itemTypeId = esiAdapter.find("Boom", Category.INVENTORY_TYPE);
+
+        verify(restTemplate).getForEntity("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=Boom&strict=true", String.class);
         assertThat(itemTypeId).isEmpty();
     }
 
     @Test
     public void find_givenNullRegion_returnsEmpty() {
-        assertThat(esiAdapter.find(null, Category.INVENTORY_TYPE, Item.class)).isEmpty();
+        assertThat(esiAdapter.find(null, Category.INVENTORY_TYPE)).isEmpty();
     }
 
     @Test
-    public void getByName_givenItemName_returnsDecoratedItem() {
-        Item item = new Item();
-        item.setSearchIds(Arrays.asList("type-id", "other-type-id"));
-        when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(item);
-
-        Item result = esiAdapter.getByName("item-name");
-
-        verify(restTemplate).getForObject("esiUrl/esiVersion/search/?datasource=esiDatasource&categories=inventory_type&search=item-name&strict=true", Item.class);
-        assertThat(result.getName()).isEqualTo("item-name");
-        assertThat(result.getCategory()).isEqualTo(Category.INVENTORY_TYPE.toString());
-        assertThat(result.getTypeId()).isEqualTo("type-id");
-    }
-
-    @Test
-    public void getByName_givenNullItemName_returnsNullItem() {
-        when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(null);
-        assertThat(esiAdapter.getByName("null-item-name")).isNull();
-    }
-
-    @Test
-    public void find_givenIdAndCategory_returnsOptionalItem() {
+    public void findItem_givenIdAndCategory_returnsOptionalItem() {
         Item item = new Item();
         when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(item);
 
-        Optional<Item> result = esiAdapter.find("id", Category.TYPES);
+        Optional<Item> result = esiAdapter.findItem("id", Category.TYPES);
 
         verify(restTemplate).getForObject("esiUrl/esiVersion/universe/types/id", Item.class);
         assertThat(result.get()).isEqualTo(item);
     }
 
     @Test
-    public void find_givenIdAndCategoryOfNullItem_returnsEmptyOptional() {
+    public void findItem_givenIdAndCategoryOfNullItem_returnsEmptyOptional() {
         when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(null);
-        assertThat(esiAdapter.find("id", Category.TYPES)).isEmpty();
+        assertThat(esiAdapter.findItem("id", Category.TYPES)).isEmpty();
     }
 
     @Test
@@ -140,7 +151,7 @@ public class EsiAdapterTest {
     }
 
     @Test
-    public void find_givenIdAndCategoryOfNullItem_returnsEmptyList() {
+    public void getCollection_givenIdAndCategoryOfNullItem_returnsEmptyList() {
         when(restTemplate.getForObject(anyString(), eq(Item.class))).thenReturn(null);
         assertThat(esiAdapter.getCollection("id", Category.CATEGORIES)).isEmpty();
     }

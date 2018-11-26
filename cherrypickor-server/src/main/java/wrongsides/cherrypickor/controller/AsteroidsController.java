@@ -5,7 +5,6 @@ import org.springframework.hateoas.ResourceSupport;
 import org.springframework.web.bind.annotation.*;
 import wrongsides.cherrypickor.controller.resource.AsteroidsResource;
 import wrongsides.cherrypickor.controller.resource.NamedResource;
-import wrongsides.cherrypickor.domain.collections.Asteroids;
 import wrongsides.cherrypickor.service.AsteroidsService;
 
 import java.io.IOException;
@@ -38,22 +37,15 @@ public class AsteroidsController {
     @PostMapping
     public AsteroidsResource post(@RequestBody String body) throws IOException, ParseException {
         AsteroidsResource asteroidsResource = new AsteroidsResource();
+        if (body != null) {
+            if (body.startsWith("{")) {
+                asteroidsResource = objectMapper.readValue(body, AsteroidsResource.class);
+            } else {
+                asteroidsResource.setAsteroids(asteroidsService.parseScannerOutput(body));
+            }
+            asteroidsService.sortByValue(asteroidsResource.getAsteroids());
+        }
         addLinks(asteroidsResource);
-        if (body == null) {
-            return asteroidsResource;
-        }
-
-        Asteroids asteroids = new Asteroids();
-
-        if (body.startsWith("{")) {
-            asteroids = objectMapper.readValue(body, Asteroids.class);
-        } else {
-            asteroids.setAsteroids(asteroidsService.parseScannerOutput(body));
-        }
-
-        asteroidsService.sortByValue(asteroids.getAsteroids());
-
-        asteroidsResource.setAsteroids(asteroids.getAsteroids());
         return asteroidsResource;
     }
 

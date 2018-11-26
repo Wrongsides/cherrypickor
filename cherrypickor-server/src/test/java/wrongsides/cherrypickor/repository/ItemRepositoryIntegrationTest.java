@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import wrongsides.cherrypickor.adapter.Category;
 import wrongsides.cherrypickor.adapter.EsiAdapter;
 import wrongsides.cherrypickor.config.CacheConfig;
-import wrongsides.cherrypickor.domain.Category;
 import wrongsides.cherrypickor.domain.Item;
 
 import java.util.Optional;
@@ -37,12 +37,12 @@ public class ItemRepositoryIntegrationTest {
     public void getByName_cachesRequestWithKeyOfName() {
         Item item = new Item(Category.INVENTORY_TYPE, "asteroid");
         item.setTypeId("type-id");
-        when(esiAdapter.getByName(anyString())).thenReturn(item);
+        when(esiAdapter.find(anyString(), any(Category.class))).thenReturn(Optional.of(item.getTypeId()));
 
         Item asteroid = itemRepository.getByName("asteroid");
         Item cachedAsteroid = itemRepository.getByName("asteroid");
 
-        verify(esiAdapter, times(1)).getByName("asteroid");
+        verify(esiAdapter, times(1)).find("asteroid", Category.INVENTORY_TYPE);
         verifyNoMoreInteractions(esiAdapter);
         assertThat(asteroid).isEqualToComparingFieldByField(item);
         assertThat(cachedAsteroid).isEqualToComparingFieldByField(item);
@@ -52,12 +52,12 @@ public class ItemRepositoryIntegrationTest {
     public void getByTypeId_putRequestInCacheWithKeyOfName() {
         Item item = new Item(Category.INVENTORY_TYPE, "asteroid");
         item.setTypeId("type-id");
-        when(esiAdapter.find(anyString(), any(Category.class))).thenReturn(Optional.of(item));
+        when(esiAdapter.findItem(anyString(), any(Category.class))).thenReturn(Optional.of(item));
 
-        Item asteroid = itemRepository.getByTypeId("typeId");
+        Item asteroid = itemRepository.getByTypeId("type-id");
         Item cachedAsteroid = itemRepository.getByName("asteroid");
 
-        verify(esiAdapter, times(1)).find("typeId", Category.TYPES);
+        verify(esiAdapter, times(1)).findItem("type-id", Category.TYPES);
         verifyNoMoreInteractions(esiAdapter);
         assertThat(asteroid).isEqualToComparingFieldByField(item);
         assertThat(cachedAsteroid).isEqualToComparingFieldByField(item);
@@ -73,7 +73,7 @@ public class ItemRepositoryIntegrationTest {
         itemRepository.getByName("asteroid");
         itemRepository.getByName("another-item");
 
-        verify(esiAdapter, times(4)).getByName(anyString());
+        verify(esiAdapter, times(4)).find(anyString(), any(Category.class));
         verifyNoMoreInteractions(esiAdapter);
     }
 }
