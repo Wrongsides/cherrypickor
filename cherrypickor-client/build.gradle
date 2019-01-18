@@ -3,23 +3,19 @@ plugins {
 }
 
 node {
-    version = '10.6.0'
-    npmVersion = '6.1.0'
+    version = '10.15.0'
     download = true
-    nodeModulesDir = file("${projectDir}")
 }
 
-task test(type: Exec, dependsOn: npmInstall) {
-    group = "build"
-    commandLine ".gradle/npm/npm-v${node.npmVersion}/bin/npm", "test"
+task test(type: NpmTask, dependsOn: npmInstall, group: 'build') {
+    args = ['test']
 }
 
-task bundle(type: Exec, dependsOn: test) {
-    commandLine ".gradle/npm/npm-v${node.npmVersion}/bin/npm", "run", "build"
+task bundle(type: NpmTask, dependsOn: test) {
+    args = ['run', 'build']
 }
 
-task clean {
-    group = "build"
+task clean(group: 'build') {
     delete "build"
     delete "node_modules"
 }
